@@ -35,7 +35,7 @@ function Navbar() {
             fontWeight: "600",
           }}
         >
-          Welcome Back 👋
+          Hello, folks !
         </h2>
 
         <p
