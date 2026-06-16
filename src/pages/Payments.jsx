@@ -10,6 +10,10 @@ function Payments() {
     (item) => item.id === Number(selectedMilestone)
   );
 
+  const progress = Math.round(
+    (paymentData.paidAmount / paymentData.totalAmount) * 100
+  );
+
   const handlePayNow = () => {
     if (!selectedMilestone) {
       alert("Select a payment");
@@ -22,9 +26,9 @@ function Payments() {
     }
 
     alert(
-      `Payment : ${selectedPayment.title}
-Amount : ₹${selectedPayment.amount.toLocaleString()}
-Method : ${paymentMethod}
+      `Payment: ${selectedPayment.title}
+Amount: ₹${selectedPayment.amount.toLocaleString()}
+Method: ${paymentMethod}
 
 Razorpay Integration Pending`
     );
@@ -32,10 +36,12 @@ Razorpay Integration Pending`
 
   return (
     <div className="payment-page">
+      {/* Header */}
+
       <div className="page-header">
         <div>
           <h2>Payments</h2>
-          <p>Project ID : {paymentData.projectId}</p>
+          <p>Project ID: {paymentData.projectId}</p>
         </div>
       </div>
 
@@ -44,7 +50,6 @@ Razorpay Integration Pending`
       <div className="summary-grid">
         <div className="summary-card">
           <span>Total Amount</span>
-
           <h2>
             ₹{paymentData.totalAmount.toLocaleString()}
           </h2>
@@ -52,7 +57,6 @@ Razorpay Integration Pending`
 
         <div className="summary-card">
           <span>Paid Amount</span>
-
           <h2 className="paid-text">
             ₹{paymentData.paidAmount.toLocaleString()}
           </h2>
@@ -60,64 +64,83 @@ Razorpay Integration Pending`
 
         <div className="summary-card">
           <span>Pending Amount</span>
-
           <h2 className="pending-text">
             ₹{paymentData.pendingAmount.toLocaleString()}
           </h2>
         </div>
       </div>
 
-      {/* Milestones */}
+      {/* Progress */}
+
+      <div className="progress-section">
+        <div className="progress-header">
+          <span>Payment Progress</span>
+          <span>{progress}%</span>
+        </div>
+
+        <div className="progress-bar">
+          <div
+            className="progress-fill"
+            style={{ width: `${progress}%` }}
+          ></div>
+        </div>
+      </div>
+
+      {/* Main Content */}
 
       <div className="card">
-        <h3>Payment Milestones</h3>
+        <h3>Payment Timeline</h3>
 
-        <table>
-          <thead>
-            <tr>
-              <th>Milestone</th>
-              <th>Amount</th>
-              <th>Due Date</th>
-              <th>Status</th>
-            </tr>
-          </thead>
+        <div className="timeline">
+          {paymentData.milestones.map((item) => (
+            <div
+              className="timeline-item"
+              key={item.id}
+            >
+              <div
+                className={`timeline-dot ${
+                  item.status === "Paid"
+                    ? "dot-paid"
+                    : "dot-pending"
+                }`}
+              ></div>
 
-          <tbody>
-            {paymentData.milestones.map((item) => (
-              <tr key={item.id}>
-                <td>{item.title}</td>
+              <div className="timeline-content">
+                <h4>{item.title}</h4>
 
-                <td>
+                <p>
                   ₹{item.amount.toLocaleString()}
-                </td>
+                </p>
 
-                <td>{item.dueDate}</td>
+                <small>
+                  Due Date: {item.dueDate}
+                </small>
+              </div>
 
-                <td>
-                  <span
-                    className={
-                      item.status === "Paid"
-                        ? "status paid"
-                        : "status pending"
-                    }
-                  >
-                    {item.status}
-                  </span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+              <span
+                className={
+                  item.status === "Paid"
+                    ? "status paid"
+                    : "status pending"
+                }
+              >
+                {item.status}
+              </span>
+            </div>
+          ))}
+        </div>
 
         {/* Payment Panel */}
 
         <div className="payment-panel">
-          <h4>Make Payment</h4>
+          <h4>💳 Make Payment</h4>
 
           <select
             value={selectedMilestone}
             onChange={(e) =>
-              setSelectedMilestone(e.target.value)
+              setSelectedMilestone(
+                e.target.value
+              )
             }
           >
             <option value="">
@@ -142,7 +165,9 @@ Razorpay Integration Pending`
           <select
             value={paymentMethod}
             onChange={(e) =>
-              setPaymentMethod(e.target.value)
+              setPaymentMethod(
+                e.target.value
+              )
             }
           >
             <option value="">
@@ -183,6 +208,30 @@ Razorpay Integration Pending`
           >
             Pay Now
           </button>
+        </div>
+
+        {/* Payment History */}
+
+        <div className="history-card">
+          <h4>Payment History</h4>
+
+          {paymentData.milestones
+            .filter(
+              (item) =>
+                item.status === "Paid"
+            )
+            .map((item) => (
+              <div
+                className="history-item"
+                key={item.id}
+              >
+                <span>{item.title}</span>
+
+                <span>
+                  ₹{item.amount.toLocaleString()}
+                </span>
+              </div>
+            ))}
         </div>
       </div>
     </div>
