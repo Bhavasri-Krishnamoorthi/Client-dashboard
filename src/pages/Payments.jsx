@@ -1,34 +1,51 @@
 import React, { useState } from "react";
-import { paymentData } from "../data/paymentData";
+import { useParams } from "react-router-dom";
+import {
+  paymentData,
+  transactions,
+} from "../data/paymentData";
 import "./PaymentPage.css";
 
 function Payments() {
-  const [selectedMilestone, setSelectedMilestone] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState("");
+  const { id } = useParams();
 
-  const selectedPayment = paymentData.milestones.find(
-    (item) => item.id === Number(selectedMilestone)
-  );
+  const isTransactionView = !!id;
 
-  const progress = Math.round(
-    (paymentData.paidAmount / paymentData.totalAmount) * 100
-  );
+  const [selectedMilestone, setSelectedMilestone] =
+    useState("");
+
+  const [paymentMethod, setPaymentMethod] =
+    useState("");
+
+  const selectedTransaction =
+    transactions.find(
+      (item) => item.id === id
+    );
+
+  const selectedPayment =
+    paymentData.milestones.find(
+      (item) =>
+        item.id === Number(selectedMilestone)
+    );
+
+  const progress =
+    selectedTransaction?.progress || 0;
 
   const handlePayNow = () => {
     if (!selectedMilestone) {
-      alert("Select a payment");
+      alert("Select Payment");
       return;
     }
 
     if (!paymentMethod) {
-      alert("Select payment method");
+      alert("Select Payment Method");
       return;
     }
 
     alert(
-      `Payment: ${selectedPayment.title}
-Amount: ₹${selectedPayment.amount.toLocaleString()}
-Method: ${paymentMethod}
+      `Payment : ${selectedPayment.title}
+Amount : ₹${selectedPayment.amount.toLocaleString()}
+Method : ${paymentMethod}
 
 Razorpay Integration Pending`
     );
@@ -36,204 +53,395 @@ Razorpay Integration Pending`
 
   return (
     <div className="payment-page">
-      {/* Header */}
-
       <div className="page-header">
-        <div>
-          <h2>Payments</h2>
-          <p>Project ID: {paymentData.projectId}</p>
-        </div>
+        <h2>
+          {isTransactionView
+            ? "Transaction Details"
+            : "Project Payments"}
+        </h2>
+
+        <p>
+          Project ID :
+          {paymentData.projectId}
+        </p>
       </div>
 
-      {/* Summary Cards */}
+      {/* TRANSACTION VIEW */}
 
-      <div className="summary-grid">
-        <div className="summary-card">
-          <span>Total Amount</span>
-          <h2>
-            ₹{paymentData.totalAmount.toLocaleString()}
-          </h2>
-        </div>
-
-        <div className="summary-card">
-          <span>Paid Amount</span>
-          <h2 className="paid-text">
-            ₹{paymentData.paidAmount.toLocaleString()}
-          </h2>
-        </div>
-
-        <div className="summary-card">
-          <span>Pending Amount</span>
-          <h2 className="pending-text">
-            ₹{paymentData.pendingAmount.toLocaleString()}
-          </h2>
-        </div>
-      </div>
-
-      {/* Progress */}
-
-      <div className="progress-section">
-        <div className="progress-header">
-          <span>Payment Progress</span>
-          <span>{progress}%</span>
-        </div>
-
-        <div className="progress-bar">
-          <div
-            className="progress-fill"
-            style={{ width: `${progress}%` }}
-          ></div>
-        </div>
-      </div>
-
-      {/* Main Content */}
-
-      <div className="card">
-        <h3>Payment Timeline</h3>
-
-        <div className="timeline">
-          {paymentData.milestones.map((item) => (
+      {isTransactionView &&
+        selectedTransaction && (
+          <>
             <div
-              className="timeline-item"
-              key={item.id}
+              className={`payment-banner ${selectedTransaction.status.toLowerCase()}`}
             >
-              <div
-                className={`timeline-dot ${
-                  item.status === "Paid"
-                    ? "dot-paid"
-                    : "dot-pending"
-                }`}
-              ></div>
+              {selectedTransaction.status ===
+                "Completed" &&
+                "✅ Payment Successfully Completed"}
 
-              <div className="timeline-content">
-                <h4>{item.title}</h4>
+              {selectedTransaction.status ===
+                "Pending" &&
+                "⏳ Payment Pending"}
 
-                <p>
-                  ₹{item.amount.toLocaleString()}
-                </p>
+              {selectedTransaction.status ===
+                "Cancelled" &&
+                "❌ Payment Cancelled"}
+            </div>
 
-                <small>
-                  Due Date: {item.dueDate}
-                </small>
+            <div className="transaction-card">
+              <h3>
+                Transaction Details
+              </h3>
+
+              <div className="transaction-grid">
+                <div>
+                  <span>
+                    Transaction ID
+                  </span>
+
+                  <h4>
+                    {
+                      selectedTransaction.id
+                    }
+                  </h4>
+                </div>
+
+                <div>
+                  <span>
+                    Payment Name
+                  </span>
+
+                  <h4>
+                    {
+                      selectedTransaction.title
+                    }
+                  </h4>
+                </div>
+
+                <div>
+                  <span>
+                    Customer
+                  </span>
+
+                  <h4>
+                    {
+                      selectedTransaction.customer
+                    }
+                  </h4>
+                </div>
+
+                <div>
+                  <span>
+                    Amount
+                  </span>
+
+                  <h4>
+                    ₹
+                    {selectedTransaction.amount.toLocaleString()}
+                  </h4>
+                </div>
+              </div>
+            </div>
+
+            <div className="summary-grid">
+              <div className="summary-card">
+                <span>
+                  Transaction Amount
+                </span>
+
+                <h2>
+                  ₹
+                  {selectedTransaction.amount.toLocaleString()}
+                </h2>
               </div>
 
-              <span
-                className={
-                  item.status === "Paid"
-                    ? "status paid"
-                    : "status pending"
-                }
-              >
-                {item.status}
-              </span>
-            </div>
-          ))}
-        </div>
+              <div className="summary-card">
+                <span>
+                  Payment Method
+                </span>
 
-        {/* Payment Panel */}
+                <h2>
+                  {
+                    selectedTransaction.paymentMethod
+                  }
+                </h2>
+              </div>
 
-        <div className="payment-panel">
-          <h4>💳 Make Payment</h4>
+              <div className="summary-card">
+                <span>Status</span>
 
-          <select
-            value={selectedMilestone}
-            onChange={(e) =>
-              setSelectedMilestone(
-                e.target.value
-              )
-            }
-          >
-            <option value="">
-              Select Payment
-            </option>
-
-            {paymentData.milestones
-              .filter(
-                (item) =>
-                  item.status === "Pending"
-              )
-              .map((item) => (
-                <option
-                  key={item.id}
-                  value={item.id}
+                <h2
+                  className={
+                    selectedTransaction.status ===
+                    "Completed"
+                      ? "paid-text"
+                      : "pending-text"
+                  }
                 >
-                  {item.title}
-                </option>
-              ))}
-          </select>
+                  {
+                    selectedTransaction.status
+                  }
+                </h2>
+              </div>
+            </div>
 
-          <select
-            value={paymentMethod}
-            onChange={(e) =>
-              setPaymentMethod(
-                e.target.value
-              )
-            }
-          >
-            <option value="">
-              Payment Method
-            </option>
-
-            <option value="UPI">
-              UPI
-            </option>
-
-            <option value="Credit Card">
-              Credit Card
-            </option>
-
-            <option value="Debit Card">
-              Debit Card
-            </option>
-
-            <option value="Net Banking">
-              Net Banking
-            </option>
-          </select>
-
-          <input
-            type="text"
-            value={
-              selectedPayment
-                ? `₹${selectedPayment.amount.toLocaleString()}`
-                : ""
-            }
-            placeholder="Amount"
-            readOnly
-          />
-
-          <button
-            className="pay-btn"
-            onClick={handlePayNow}
-          >
-            Pay Now
-          </button>
-        </div>
-
-        {/* Payment History */}
-
-        <div className="history-card">
-          <h4>Payment History</h4>
-
-          {paymentData.milestones
-            .filter(
-              (item) =>
-                item.status === "Paid"
-            )
-            .map((item) => (
-              <div
-                className="history-item"
-                key={item.id}
-              >
-                <span>{item.title}</span>
+            <div className="progress-section">
+              <div className="progress-header">
+                <span>
+                  Transaction Progress
+                </span>
 
                 <span>
-                  ₹{item.amount.toLocaleString()}
+                  {progress}%
                 </span>
               </div>
-            ))}
-        </div>
-      </div>
+
+              <div className="progress-bar">
+                <div
+                  className="progress-fill"
+                  style={{
+                    width: `${progress}%`,
+                  }}
+                />
+              </div>
+            </div>
+
+            <div className="card">
+              <h3>
+                Payment Timeline
+              </h3>
+
+              <div className="timeline">
+                {selectedTransaction.timeline.map(
+                  (
+                    item,
+                    index
+                  ) => (
+                    <div
+                      key={index}
+                      className="timeline-item"
+                    >
+                      <div className="timeline-dot dot-paid"></div>
+
+                      <div className="timeline-content">
+                        <h4>
+                          {
+                            item.step
+                          }
+                        </h4>
+
+                        <small>
+                          {
+                            item.date
+                          }
+                        </small>
+                      </div>
+                    </div>
+                  )
+                )}
+              </div>
+            </div>
+          </>
+        )}
+
+      {/* PROJECT PAYMENT VIEW */}
+
+      {!isTransactionView && (
+        <>
+          <div className="summary-grid">
+            <div className="summary-card">
+              <span>
+                Total Amount
+              </span>
+
+              <h2>
+                ₹
+                {paymentData.totalAmount.toLocaleString()}
+              </h2>
+            </div>
+
+            <div className="summary-card">
+              <span>
+                Paid Amount
+              </span>
+
+              <h2 className="paid-text">
+                ₹
+                {paymentData.paidAmount.toLocaleString()}
+              </h2>
+            </div>
+
+            <div className="summary-card">
+              <span>
+                Pending Amount
+              </span>
+
+              <h2 className="pending-text">
+                ₹
+                {paymentData.pendingAmount.toLocaleString()}
+              </h2>
+            </div>
+          </div>
+
+          <div className="card">
+            <h3>
+              Project Payment Timeline
+            </h3>
+
+            <div className="timeline">
+              {paymentData.milestones.map(
+                (item) => (
+                  <div
+                    key={item.id}
+                    className="timeline-item"
+                  >
+                    <div
+                      className={`timeline-dot ${
+                        item.status ===
+                        "Paid"
+                          ? "dot-paid"
+                          : "dot-pending"
+                      }`}
+                    ></div>
+
+                    <div className="timeline-content">
+                      <h4>
+                        {
+                          item.title
+                        }
+                      </h4>
+
+                      <p>
+                        ₹
+                        {item.amount.toLocaleString()}
+                      </p>
+
+                      <small>
+                        Due Date :
+                        {
+                          item.dueDate
+                        }
+                      </small>
+                    </div>
+
+                    <span
+                      className={
+                        item.status ===
+                        "Paid"
+                          ? "status paid"
+                          : "status pending"
+                      }
+                    >
+                      {item.status}
+                    </span>
+                  </div>
+                )
+              )}
+            </div>
+          </div>
+
+          <div className="payment-panel">
+            <h4>
+              Make Payment
+            </h4>
+
+            <div className="payment-row">
+              <select
+                value={
+                  selectedMilestone
+                }
+                onChange={(e) =>
+                  setSelectedMilestone(
+                    e.target.value
+                  )
+                }
+              >
+                <option value="">
+                  Select Payment
+                </option>
+
+                {paymentData.milestones
+                  .filter(
+                    (
+                      item
+                    ) =>
+                      item.status ===
+                      "Pending"
+                  )
+                  .map(
+                    (
+                      item
+                    ) => (
+                      <option
+                        key={
+                          item.id
+                        }
+                        value={
+                          item.id
+                        }
+                      >
+                        {
+                          item.title
+                        }
+                      </option>
+                    )
+                  )}
+              </select>
+
+              <select
+                value={
+                  paymentMethod
+                }
+                onChange={(e) =>
+                  setPaymentMethod(
+                    e.target.value
+                  )
+                }
+              >
+                <option value="">
+                  Payment Method
+                </option>
+
+                <option>
+                  UPI
+                </option>
+
+                <option>
+                  Credit Card
+                </option>
+
+                <option>
+                  Debit Card
+                </option>
+
+                <option>
+                  Net Banking
+                </option>
+              </select>
+
+              <div className="amount-section">
+                <input
+                  readOnly
+                  value={
+                    selectedPayment
+                      ? `₹${selectedPayment.amount.toLocaleString()}`
+                      : ""
+                  }
+                  placeholder="Amount"
+                />
+
+                <button
+                  className="pay-btn"
+                  onClick={
+                    handlePayNow
+                  }
+                >
+                  Pay Now
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
