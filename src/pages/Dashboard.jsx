@@ -653,48 +653,58 @@ function RecentTransaction({ transactions }) {
         </h2>
 
         <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-          <button
-            onClick={() => setShowSearch(!showSearch)}
-            style={{
-              border: "none",
-              background: showSearch ? "#f0f0f0" : "transparent",
-              fontSize: 18,
-              cursor: "pointer",
-              padding: "6px 8px",
-              borderRadius: 6,
-            }}
-          >
-            <CiSearch />
-          </button>
-
-          <button
-            onClick={() => setShowFilter(!showFilter)}
-            style={{
-              border: "none",
-              background: showFilter ? "#f0f0f0" : "transparent",
-              fontSize: 18,
-              cursor: "pointer",
-              padding: "6px 8px",
-              borderRadius: 6,
-            }}
-          >
-            <MdFilterList />
-          </button>
+  {/* Search */}
+  <button
+    onClick={() => setShowSearch(!showSearch)}
+    style={{
+      width: "42px",
+      height: "42px",
+      border: "1px solid #e5e7eb",
+      background: "#ffffff",
+      borderRadius: "10px",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      cursor: "pointer",
+    }}
+  >
+    <CiSearch size={20} color="#111827" />
+  </button>
+{/* Filter */}
+  <button
+    onClick={() => setShowFilter(!showFilter)}
+    style={{
+      width: "42px",
+      height: "42px",
+      border: "1px solid #e5e7eb",
+      background: "#ffffff",
+      borderRadius: "10px",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      cursor: "pointer",
+    }}
+  >
+    <MdFilterList size={20} color="#111827" />
+  </button>
 
           <div style={{ position: "relative" }}>
-            <button
-              onClick={() => setShowMenu(!showMenu)}
-              style={{
-                border: "none",
-                background: showMenu ? "#f0f0f0" : "transparent",
-                fontSize: 18,
-                cursor: "pointer",
-                padding: "6px 8px",
-                borderRadius: 6,
-              }}
-            >
-              <MdMoreVert />
-            </button>
+           <button
+  onClick={() => setShowMenu(!showMenu)}
+  style={{
+    width: "42px",
+    height: "42px",
+    border: "1px solid #e5e7eb",
+    background: "#fff",
+    borderRadius: "10px",
+    fontSize: "22px",
+    fontWeight: "bold",
+    color: "#111827",
+    cursor: "pointer",
+  }}
+>
+  ⋮
+</button>
 
             {showMenu && (
               <div
@@ -764,40 +774,49 @@ function RecentTransaction({ transactions }) {
       </div>
 
       {showSearch && (
-        <div style={{ marginTop: 12, display: "flex", gap: 8 }}>
-          <input
-            type="text"
-            placeholder="Search by name, customer, or ID..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            style={{
-              flex: 1,
-              padding: "8px 12px",
-              border: "1px solid #ddd",
-              borderRadius: 6,
-              fontSize: 14,
-            }}
-            autoFocus
-          />
+  <div
+    style={{
+      marginTop: 12,
+      display: "flex",
+      gap: 8,
+      alignItems: "center",
+    }}
+  >
+    {/* Search Icon Box */}
+    <div
+      style={{
+        width: "42px",
+        height: "42px",
+        border: "1px solid #ddd",
+        borderRadius: "6px",
+        background: "#fff",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        fontSize: "20px",
+        color: "#666",
+      }}
+    >
+      <CiSearch size={20} color="#666" />
+    </div>
 
-          <button
-            onClick={() => {
-              setSearchTerm("");
-              setShowSearch(false);
-            }}
-            style={{
-              padding: "8px 12px",
-              border: "1px solid #ddd",
-              background: "#fff",
-              borderRadius: 6,
-              cursor: "pointer",
-              fontSize: 14,
-            }}
-          >
-            Clear
-          </button>
-        </div>
-      )}
+    {/* Search Input */}
+    <input
+      type="text"
+      placeholder="Search by name, customer, or ID..."
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+      style={{
+        flex: 1,
+        padding: "10px 12px",
+        border: "1px solid #ddd",
+        borderRadius: "6px",
+        fontSize: "14px",
+      }}
+      autoFocus
+    />
+  </div>
+)}
 
       {showFilter && (
         <div
