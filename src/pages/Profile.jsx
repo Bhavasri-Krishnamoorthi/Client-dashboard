@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Profile.css";
+import MainLayout from "../layouts/MainLayout";
 
 function Profile() {
+  
   const navigate = useNavigate();
 
   const [isEditing, setIsEditing] = useState(false);
@@ -63,6 +65,7 @@ function Profile() {
   };
 
   return (
+    <MainLayout>
     <div className="profile-page">
       <div className="profile-container">
 
@@ -192,6 +195,7 @@ function Profile() {
 
       </div>
     </div>
+  </MainLayout>
   );
 }
 

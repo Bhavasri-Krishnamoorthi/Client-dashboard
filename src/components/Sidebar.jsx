@@ -24,7 +24,8 @@ function Sidebar() {
     <div
       style={{
         width: "280px",
-        height: "95vh",
+        height: "calc(100vh - 40px)",
+        overflowY: "auto",
         position: "fixed",
         left: "20px",
         top: "20px",

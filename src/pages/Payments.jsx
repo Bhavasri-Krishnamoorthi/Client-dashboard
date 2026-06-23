@@ -5,6 +5,7 @@ import {
   transactions,
 } from "../data/paymentData";
 import "./PaymentPage.css";
+import MainLayout from "../layouts/MainLayout";
 
 function Payments() {
   const { id } = useParams();
@@ -52,6 +53,7 @@ Razorpay Integration Pending`
   };
 
   return (
+    <MainLayout>
     <div className="payment-page">
       <div className="page-header">
         <h2>
@@ -443,6 +445,7 @@ Razorpay Integration Pending`
         </>
       )}
     </div>
+    </MainLayout>
   );
 }
 

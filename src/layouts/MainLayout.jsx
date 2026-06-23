@@ -10,6 +10,7 @@ function MainLayout({ children }) {
         style={{
           marginLeft: "340px",
           padding: "20px",
+          minHeight: "100vh",
         }}
       >
         <Navbar />
@@ -17,6 +18,7 @@ function MainLayout({ children }) {
         <div
           style={{
             marginTop: "25px",
+            paddingBottom: "30px",
           }}
         >
           {children}
