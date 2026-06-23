@@ -2,6 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Profile.css";
 import MainLayout from "../layouts/MainLayout";
+import {
+  getProfile,
+  saveProfile,
+} from "../services/profileService";
 
 function Profile() {
   
@@ -19,9 +23,7 @@ function Profile() {
   });
 
   useEffect(() => {
-    const storedData = JSON.parse(
-      localStorage.getItem("clientProfile")
-    );
+    const storedData = getProfile();
 
     if (storedData) {
       setProfile({
@@ -56,10 +58,7 @@ function Profile() {
       address: profile.projectAddress,
     };
 
-    localStorage.setItem(
-      "clientProfile",
-      JSON.stringify(updatedData)
-    );
+   saveProfile(updatedData);
 
     setIsEditing(false);
   };

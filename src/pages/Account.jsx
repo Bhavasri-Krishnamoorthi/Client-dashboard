@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Account.css";
+import { saveProfile } from "../services/profileService";
 
 function Account() {
   const navigate = useNavigate();
@@ -25,10 +26,7 @@ function Account() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    localStorage.setItem(
-      "clientProfile",
-      JSON.stringify(formData)
-    );
+    saveProfile(formData);
 
     navigate("/dashboard");
   };

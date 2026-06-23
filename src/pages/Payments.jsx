@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import {
   paymentData,
   transactions,
-} from "../data/paymentData";
+} from "../services/paymentService";
 import "./PaymentPage.css";
 import MainLayout from "../layouts/MainLayout";
 

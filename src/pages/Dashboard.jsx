@@ -4,39 +4,10 @@ import { MdFilterList, MdMoreVert } from "react-icons/md";
 import { FiDownload } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import {projectDetails,projectStages,} from "../services/dashboardService";
+import {recentTransactions,} from "../services/paymentService";
 
 function ProjectDetailsPopup({ onClose }) {
-  const projectDetails = [
-    {
-      label: "Project Name",
-      value: "Ecommerce Website",
-    },
-    {
-      label: "Project ID",
-      value: "PRJ-2024-001",
-    },
-    {
-      label: "Client",
-      value: "TrendCart Online Store",
-    },
-    {
-      label: "Project Manager",
-      value: "David Wilson",
-    },
-    {
-      label: "Technologies",
-      value: "React, Node.js, MySQL, AWS",
-    },
-    {
-      label: "Start Date",
-      value: "10 Apr 2024",
-    },
-    {
-      label: "Expected Delivery",
-      value: "15 Jun 2024",
-    },
-  ];
-
   return (
     <div
       style={{
@@ -329,13 +300,7 @@ function ProjectDetailsPopup({ onClose }) {
 }
 
 function MyProjectCard({ onViewDetails }) {
-  const stages = [
-    { name: "Discussion", completed: true },
-    { name: "Design", completed: true },
-    { name: "Development", completed: false, current: true },
-    { name: "Testing", completed: false },
-    { name: "Live", completed: false },
-  ];
+  const stages = projectStages;
   const currentStageIndex = stages.findIndex((stage) => stage.current);
 
   return (
@@ -585,34 +550,7 @@ function RecentTransaction({ transactions }) {
   const [showMenu, setShowMenu] = useState(false);
   const [filterStatus, setFilterStatus] = useState("All");
 
-  const data =
-    transactions ||
-    [
-      {
-        id: "TK-98421",
-        productName: "Project1",
-        dateTime: "19 Nov 2025, 10:32",
-        customer: "Ethan Clarke",
-        price: "$79.00",
-        status: "Completed",
-      },
-      {
-        id: "TK-98422",
-        productName: "Project2",
-        dateTime: "19 Nov 2025, 11:05",
-        customer: "Ava Mitchell",
-        price: "$159.00",
-        status: "Cancelled",
-      },
-      {
-        id: "TK-98423",
-        productName: "Project3",
-        dateTime: "19 Nov 2025, 11:44",
-        customer: "Liam Parker",
-        price: "$55.00",
-        status: "Pending",
-      },
-    ];
+ const data = transactions || recentTransactions;
 
   const getStatusStyle = (status) => {
     switch (status) {
