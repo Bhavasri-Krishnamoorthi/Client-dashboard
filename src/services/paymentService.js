@@ -42,55 +42,39 @@ export const recentTransactions = [
   {
     id: "TK-98421",
     productName: "Project1",
-    customer: "Ethan Clarke",
-    amount: 25000,
+    dateTime: "19 Nov 2025, 10:32",
+    customer: "TrendCart",
     price: "$79.00",
     status: "Completed",
+    amount: 25000,
     paymentMethod: "UPI",
     progress: 100,
-    timeline: [
-      {
-        step: "Payment Initiated",
-        date: "19 Nov 2025",
-      },
-      {
-        step: "Payment Completed",
-        date: "19 Nov 2025",
-      },
-    ],
+    timeline: [],
   },
 
   {
     id: "TK-98422",
     productName: "Project2",
-    customer: "Ava Mitchell",
-    amount: 15000,
+    dateTime: "20 Nov 2025, 11:15",
+    customer: "TrendCart",
     price: "$159.00",
     status: "Cancelled",
+    amount: 15000,
     paymentMethod: "Card",
     progress: 0,
-    timeline: [
-      {
-        step: "Payment Cancelled",
-        date: "19 Nov 2025",
-      },
-    ],
+    timeline: [],
   },
 
   {
     id: "TK-98423",
     productName: "Project3",
-    customer: "Liam Parker",
-    amount: 10000,
+    dateTime: "21 Nov 2025, 09:45",
+    customer: "TrendCart",
     price: "$55.00",
     status: "Pending",
+    amount: 10000,
     paymentMethod: "Net Banking",
     progress: 50,
-    timeline: [
-      {
-        step: "Payment Initiated",
-        date: "19 Nov 2025",
-      },
-    ],
+    timeline: [],
   },
 ];
