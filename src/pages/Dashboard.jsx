@@ -567,9 +567,17 @@ function RecentTransaction({ transactions }) {
 
   const filteredData = data.filter((row) => {
     const matchesSearch =
-      row.productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      row.customer.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      row.id.toLowerCase().includes(searchTerm.toLowerCase());
+  (row.productName || row.title || "")
+    .toLowerCase()
+    .includes(searchTerm.toLowerCase()) ||
+
+  (row.customer || "")
+    .toLowerCase()
+    .includes(searchTerm.toLowerCase()) ||
+
+  (row.id || "")
+    .toLowerCase()
+    .includes(searchTerm.toLowerCase());
 
     const matchesStatus = filterStatus === "All" || row.status === filterStatus;
 

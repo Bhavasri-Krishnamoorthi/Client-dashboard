@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import {
-  paymentData,
-  transactions,
-} from "../services/paymentService";
 import "./PaymentPage.css";
 import MainLayout from "../layouts/MainLayout";
+
+import {
+  getPaymentData,
+  recentTransactions,
+} from "../services/paymentService";
+
+const paymentData = getPaymentData();
+const transactions = recentTransactions;
 
 function Payments() {
   const { id } = useParams();

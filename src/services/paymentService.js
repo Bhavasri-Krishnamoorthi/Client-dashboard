@@ -3,9 +3,7 @@ export const getPaymentData = () => {
     projectId: "PRJ-2024-001",
 
     totalAmount: 125000,
-
     paidAmount: 75000,
-
     pendingAmount: 50000,
 
     milestones: [
@@ -16,7 +14,6 @@ export const getPaymentData = () => {
         dueDate: "10 Apr 2024",
         status: "Paid",
       },
-
       {
         id: 2,
         title: "Design Approval",
@@ -24,7 +21,6 @@ export const getPaymentData = () => {
         dueDate: "25 Apr 2024",
         status: "Paid",
       },
-
       {
         id: 3,
         title: "Development Start",
@@ -32,7 +28,6 @@ export const getPaymentData = () => {
         dueDate: "15 May 2024",
         status: "Paid",
       },
-
       {
         id: 4,
         title: "Final Payment",
@@ -43,18 +38,31 @@ export const getPaymentData = () => {
     ],
   };
 };
+export const recentTransactions = [
+  {
+    id: "TK-98421",
+    productName: "Project1",
+    dateTime: "19 Nov 2025, 10:32",
+    customer: "Ethan Clarke",
+    price: "$79.00",
+    status: "Completed",
+  },
 
-export const getTransactions = () => {
-  return [
-    {
-      id: "TK-98421",
-      title: "Advance Payment",
-      customer: "TrendCart",
-      amount: 25000,
-      status: "Completed",
-      paymentMethod: "UPI",
-      progress: 100,
-      timeline: [],
-    },
-  ];
-};
+  {
+    id: "TK-98422",
+    productName: "Project2",
+    dateTime: "19 Nov 2025, 11:05",
+    customer: "Ava Mitchell",
+    price: "$159.00",
+    status: "Cancelled",
+  },
+
+  {
+    id: "TK-98423",
+    productName: "Project3",
+    dateTime: "19 Nov 2025, 11:44",
+    customer: "Liam Parker",
+    price: "$55.00",
+    status: "Pending",
+  },
+];
