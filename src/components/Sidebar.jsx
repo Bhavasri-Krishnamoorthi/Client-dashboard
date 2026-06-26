@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import {
   FaHome,
   FaCreditCard,
@@ -92,34 +92,47 @@ function Sidebar() {
       </div>
 
       <nav>
-        <Link
+        <NavLink
           to="/dashboard"
-          style={{
+          style={({ isActive }) => ({
             ...menuItem,
-            background:
-              "linear-gradient(135deg,#38bdf8,#60a5fa)",
-            color: "white",
-          }}
+            background: isActive
+              ? "linear-gradient(135deg,#38bdf8,#60a5fa)"
+              : "transparent",
+            color: isActive ? "#fff" : "#334155",
+          })}
         >
           <FaHome />
           Dashboard
-        </Link>
+        </NavLink>
 
-        <Link
+        <NavLink
           to="/payments"
-          style={menuItem}
+          style={({ isActive }) => ({
+            ...menuItem,
+            background: isActive
+              ? "linear-gradient(135deg,#38bdf8,#60a5fa)"
+              : "transparent",
+            color: isActive ? "#fff" : "#334155",
+          })}
         >
           <FaCreditCard />
           Payments
-        </Link>
+        </NavLink>
 
-        <Link
+        <NavLink
           to="/profile"
-          style={menuItem}
+          style={({ isActive }) => ({
+            ...menuItem,
+            background: isActive
+              ? "linear-gradient(135deg,#38bdf8,#60a5fa)"
+              : "transparent",
+            color: isActive ? "#fff" : "#334155",
+          })}
         >
           <FaUser />
           Profile
-        </Link>
+        </NavLink>
 
         <Link
           to="/"

@@ -22,6 +22,29 @@
   color: #64748b;
 }
 
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.back-btn {
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 50%;
+  background: #2563eb;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.back-btn:hover {
+  background: #1d4ed8;
+}
+
 /* Success Banner */
 
 .payment-banner {

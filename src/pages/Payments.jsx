@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import { FaArrowLeft } from "react-icons/fa";
 import "./PaymentPage.css";
 import MainLayout from "../layouts/MainLayout";
 
@@ -13,6 +14,7 @@ const transactions = recentTransactions;
 
 function Payments() {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const isTransactionView = !!id;
 
@@ -60,16 +62,24 @@ Razorpay Integration Pending`
     <MainLayout>
       <div className="payment-page">
         <div className="page-header">
-          <h2>
-            {isTransactionView
-              ? "Transaction Details"
-              : "Project Payments"}
-          </h2>
+          <button
+            className="back-btn"
+            onClick={() => navigate(-1)}
+          >
+            <FaArrowLeft />
+          </button>
 
-          <p>
-            Project ID :
-            {paymentData.projectId}
-          </p>
+          <div>
+            <h2>
+              {isTransactionView
+                ? "Transaction Details"
+                : "Project Payments"}
+            </h2>
+
+            <p>
+              Project ID : {paymentData.projectId}
+            </p>
+          </div>
         </div>
 
         {/* TRANSACTION VIEW */}
@@ -302,9 +312,9 @@ Razorpay Integration Pending`
                     >
                       <div
                         className={`timeline-dot ${item.status ===
-                            "Paid"
-                            ? "dot-paid"
-                            : "dot-pending"
+                          "Paid"
+                          ? "dot-paid"
+                          : "dot-pending"
                           }`}
                       ></div>
 

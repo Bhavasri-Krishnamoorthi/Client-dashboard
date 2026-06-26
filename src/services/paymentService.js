@@ -49,7 +49,20 @@ export const recentTransactions = [
     amount: 25000,
     paymentMethod: "UPI",
     progress: 100,
-    timeline: [],
+   timeline: [
+  {
+    step: "Payment Initiated",
+    date: "19 Nov 2025, 09:45 AM",
+  },
+  {
+    step: "Payment Verified",
+    date: "19 Nov 2025, 10:10 AM",
+  },
+  {
+    step: "Payment Completed",
+    date: "19 Nov 2025, 10:32 AM",
+  },
+],
   },
 
   {
@@ -62,7 +75,20 @@ export const recentTransactions = [
     amount: 15000,
     paymentMethod: "Card",
     progress: 0,
-    timeline: [],
+    timeline: [
+  {
+    step: "Payment Initiated",
+    date: "20 Nov 2025, 10:50 AM",
+  },
+  {
+    step: "Payment Verification Failed",
+    date: "20 Nov 2025, 11:10 AM",
+  },
+  {
+    step: "Payment Cancelled",
+    date: "20 Nov 2025, 11:15 AM",
+  },
+],
   },
 
   {
@@ -75,6 +101,15 @@ export const recentTransactions = [
     amount: 10000,
     paymentMethod: "Net Banking",
     progress: 50,
-    timeline: [],
+    timeline: [
+  {
+    step: "Payment Initiated",
+    date: "21 Nov 2025, 09:20 AM",
+  },
+  {
+    step: "Awaiting Approval",
+    date: "21 Nov 2025, 09:45 AM",
+  },
+],
   },
 ];
