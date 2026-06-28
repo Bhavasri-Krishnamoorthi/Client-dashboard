@@ -433,24 +433,22 @@ Razorpay Integration Pending`
                   </option>
                 </select>
 
-                <div className="amount-section">
-                  <input
-                    readOnly
-                    value={
-                      selectedPayment
-                        ? `₹${selectedPayment.amount.toLocaleString()}`
-                        : ""
-                    }
-                    placeholder="Amount"
-                  />
+                <input
+                  readOnly
+                  value={
+                    selectedPayment
+                      ? `₹${selectedPayment.amount.toLocaleString()}`
+                      : ""
+                  }
+                  placeholder="Amount"
+                />
 
-                  <button
-                    className="pay-btn"
-                    onClick={handlePayNow}
-                  >
-                    Pay Now
-                  </button>
-                </div>
+                <button
+                  className="pay-btn"
+                  onClick={handlePayNow}
+                >
+                  Pay Now
+                </button>
               </div>
             </div>
           </>
