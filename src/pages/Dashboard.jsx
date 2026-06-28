@@ -699,7 +699,7 @@ function RecentTransaction({ transactions }) {
             )}
           </div>
 
-          <button
+           <button
             style={{
               background: "#111",
               color: "#fff",
@@ -709,6 +709,7 @@ function RecentTransaction({ transactions }) {
               cursor: "pointer",
               display: "flex",
               alignItems: "center",
+              justifyContent: "center",
               gap: 8,
             }}
             onClick={() => alert("Export: Downloading data...")}
