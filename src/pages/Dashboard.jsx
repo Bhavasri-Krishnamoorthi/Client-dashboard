@@ -876,7 +876,7 @@ function RecentTransaction({ transactions }) {
                   </td>
 
                   <td style={{ padding: "12px 8px" }}>
-                    <div style={{ fontWeight: 600 }}>{row.productName}</div>
+                    <div style={{ fontWeight: 600 }}>{row.title}</div>
                     <div style={{ fontSize: 12, color: "#888" }}>
                       {row.description}
                     </div>

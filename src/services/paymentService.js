@@ -41,7 +41,7 @@ export const getPaymentData = () => {
 export const recentTransactions = [
   {
     id: "TK-98421",
-    productName: "Project1",
+    title: "Project1",
     dateTime: "19 Nov 2025, 10:32",
     customer: "TrendCart",
     price: "$79.00",
@@ -67,7 +67,7 @@ export const recentTransactions = [
 
   {
     id: "TK-98422",
-    productName: "Project2",
+    title: "Project2",
     dateTime: "20 Nov 2025, 11:15",
     customer: "TrendCart",
     price: "$159.00",
@@ -93,7 +93,7 @@ export const recentTransactions = [
 
   {
     id: "TK-98423",
-    productName: "Project3",
+    title: "Project3",
     dateTime: "21 Nov 2025, 09:45",
     customer: "TrendCart",
     price: "$55.00",
