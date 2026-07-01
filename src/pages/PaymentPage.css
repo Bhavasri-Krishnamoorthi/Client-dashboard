@@ -254,21 +254,17 @@
 .payment-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 20px;
 }
 
 .payment-row select,
 .payment-row input {
-  width: 250px;
   flex: 1;
   height: 48px;
   border: 1px solid #dbe2ea;
   border-radius: 10px;
   padding: 0 14px;
   font-size: 14px;
-  background: white;
-  box-sizing: border-box;
 }
 
 .payment-row select:focus,
@@ -278,7 +274,7 @@
 }
 
 .pay-btn {
-  width: 180px;
+  flex: 1;
   height: 48px;
   border: none;
   border-radius: 10px;
@@ -287,13 +283,12 @@
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  transition: 0.3s;
+  transition: .3s;
 }
 
 .pay-btn:hover {
   background: #1d4ed8;
 }
-
 /* Responsive */
 
 @media (max-width: 768px) {
