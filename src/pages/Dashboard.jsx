@@ -600,39 +600,138 @@ function RecentTransaction({ transactions }) {
 
         <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
   {/* Search */}
-  <button
-    onClick={() => setShowSearch(!showSearch)}
-    style={{
-      width: "42px",
-      height: "42px",
-      border: "1px solid #e5e7eb",
-      background: "#ffffff",
-      borderRadius: "10px",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      cursor: "pointer",
-    }}
-  >
-    <CiSearch size={20} color="#111827" />
-  </button>
+  <div style={{ position: "relative" }}>
+    <button
+      onClick={() => setShowSearch(!showSearch)}
+      style={{
+        width: "42px",
+        height: "42px",
+        border: "1px solid #e5e7eb",
+        background: "#ffffff",
+        borderRadius: "10px",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        cursor: "pointer",
+      }}
+    >
+      <CiSearch size={20} color="#111827" />
+    </button>
+    {showSearch && (
+      <div
+        style={{
+          position: "absolute",
+          top: "calc(100% + 4px)",
+          left: 0,
+          background: "#fff",
+          border: "1px solid #eee",
+          borderRadius: 6,
+          boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+          minWidth: 300,
+          zIndex: 10,
+          padding: "12px",
+        }}
+      >
+        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+          {/* Search Icon Box */}
+          <div
+            style={{
+              width: "42px",
+              height: "42px",
+              border: "1px solid #ddd",
+              borderRadius: "6px",
+              background: "#f8f9fa",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              fontSize: "20px",
+              color: "#666",
+              flexShrink: 0,
+            }}
+          >
+            <CiSearch size={20} color="#666" />
+          </div>
+
+          {/* Search Input */}
+          <input
+            type="text"
+            placeholder="Search..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            style={{
+              flex: 1,
+              padding: "10px 12px",
+              border: "1px solid #ddd",
+              borderRadius: "6px",
+              fontSize: "14px",
+            }}
+            autoFocus
+          />
+        </div>
+      </div>
+    )}
+  </div>
+
 {/* Filter */}
-  <button
-    onClick={() => setShowFilter(!showFilter)}
-    style={{
-      width: "42px",
-      height: "42px",
-      border: "1px solid #e5e7eb",
-      background: "#ffffff",
-      borderRadius: "10px",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      cursor: "pointer",
-    }}
-  >
-    <MdFilterList size={20} color="#111827" />
-  </button>
+  <div style={{ position: "relative" }}>
+    <button
+      onClick={() => setShowFilter(!showFilter)}
+      style={{
+        width: "42px",
+        height: "42px",
+        border: "1px solid #e5e7eb",
+        background: "#ffffff",
+        borderRadius: "10px",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        cursor: "pointer",
+      }}
+    >
+      <MdFilterList size={20} color="#111827" />
+    </button>
+    {showFilter && (
+      <div
+        style={{
+          position: "absolute",
+          top: "calc(100% + 4px)",
+          left: 0,
+          background: "#fff",
+          border: "1px solid #eee",
+          borderRadius: 6,
+          boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+          minWidth: 280,
+          zIndex: 10,
+          padding: "12px",
+        }}
+      >
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+          {["All", "Completed", "Pending", "Cancelled"].map((status) => (
+            <button
+              key={status}
+              onClick={() => setFilterStatus(status)}
+              style={{
+                padding: "10px 14px",
+                border:
+                  filterStatus === status
+                    ? "1px solid #111"
+                    : "1px solid #ddd",
+                background: filterStatus === status ? "#111" : "#fff",
+                color: filterStatus === status ? "#fff" : "#333",
+                borderRadius: 6,
+                cursor: "pointer",
+                fontSize: 13,
+                fontWeight: filterStatus === status ? "600" : "400",
+                transition: "all 0.2s ease",
+              }}
+            >
+              {status}
+            </button>
+          ))}
+        </div>
+      </div>
+    )}
+  </div>
 
           <div style={{ position: "relative" }}>
            <button
@@ -720,84 +819,7 @@ function RecentTransaction({ transactions }) {
         </div>
       </div>
 
-      {showSearch && (
-  <div
-    style={{
-      marginTop: 12,
-      display: "flex",
-      gap: 8,
-      alignItems: "center",
-    }}
-  >
-    {/* Search Icon Box */}
-    <div
-      style={{
-        width: "42px",
-        height: "42px",
-        border: "1px solid #ddd",
-        borderRadius: "6px",
-        background: "#fff",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        fontSize: "20px",
-        color: "#666",
-      }}
-    >
-      <CiSearch size={20} color="#666" />
-    </div>
 
-    {/* Search Input */}
-    <input
-      type="text"
-      placeholder="Search by name, customer, or ID..."
-      value={searchTerm}
-      onChange={(e) => setSearchTerm(e.target.value)}
-      style={{
-        flex: 1,
-        padding: "10px 12px",
-        border: "1px solid #ddd",
-        borderRadius: "6px",
-        fontSize: "14px",
-      }}
-      autoFocus
-    />
-  </div>
-)}
-
-      {showFilter && (
-        <div
-          style={{
-            marginTop: 12,
-            marginBottom: 25,
-            display: "flex",
-            gap: 8,
-            flexWrap: "wrap",
-          }}
-        >
-          {["All", "Completed", "Pending", "Cancelled"].map((status) => (
-            <button
-              key={status}
-              onClick={() => setFilterStatus(status)}
-              style={{
-                padding: "6px 12px",
-                border:
-                  filterStatus === status
-                    ? "1px solid #111"
-                    : "1px solid #ddd",
-                background: filterStatus === status ? "#111" : "#fff",
-                color: filterStatus === status ? "#fff" : "#333",
-                borderRadius: 6,
-                cursor: "pointer",
-                fontSize: 13,
-                fontWeight: filterStatus === status ? "600" : "400",
-              }}
-            >
-              {status}
-            </button>
-          ))}
-        </div>
-      )}
 
       <div
         style={{
@@ -854,7 +876,7 @@ function RecentTransaction({ transactions }) {
                   </td>
 
                   <td style={{ padding: "12px 8px" }}>
-                    <div style={{ fontWeight: 600 }}>{row.productName}</div>
+                    <div style={{ fontWeight: 600 }}>{row.title}</div>
                     <div style={{ fontSize: 12, color: "#888" }}>
                       {row.description}
                     </div>
