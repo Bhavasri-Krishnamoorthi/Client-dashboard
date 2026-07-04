@@ -92,6 +92,7 @@
   color: #16244d;
   font-size: 18px;
   font-weight: 700;
+  word-break: break-word;
 }
 
 .large-card {
@@ -117,7 +118,7 @@
 }
 
 .button-container {
-  margin-top: 15px;
+  margin-top: 20px;
 }
 
 .edit-btn,
@@ -141,20 +142,6 @@
   box-shadow: 0 0 25px rgba(60, 141, 240, 0.8);
 }
 
-@media (max-width: 900px) {
-  .profile-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .profile-title {
-    font-size: 34px;
-  }
-
-  .profile-name {
-    font-size: 22px;
-  }
-}
-
 .back-btn {
   width: 44px;
   height: 44px;
@@ -174,4 +161,76 @@
 .back-btn:hover {
   background: #2563eb;
   color: white;
+}
+
+/* ===========================
+   Mobile Responsive
+=========================== */
+
+@media (max-width: 768px) {
+
+  .profile-page {
+    padding: 10px;
+  }
+
+  .profile-container {
+    padding: 15px;
+    border-radius: 18px;
+  }
+
+  .profile-title {
+    font-size: 28px;
+    text-align: center;
+  }
+
+  .profile-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 15px;
+  }
+
+  .profile-avatar {
+    width: 70px;
+    height: 70px;
+    font-size: 32px;
+  }
+
+  .profile-name {
+    font-size: 22px;
+  }
+
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .info-card {
+    padding: 14px;
+  }
+
+  .info-card h3 {
+    font-size: 16px;
+  }
+
+  .info-card input,
+  .info-card textarea {
+    font-size: 15px;
+  }
+
+  .button-container {
+    display: flex;
+    justify-content: center;
+  }
+
+  .edit-btn,
+  .save-btn {
+    width: 100%;
+    max-width: 300px;
+    font-size: 18px;
+  }
+
+  .back-btn {
+    width: 40px;
+    height: 40px;
+  }
 }

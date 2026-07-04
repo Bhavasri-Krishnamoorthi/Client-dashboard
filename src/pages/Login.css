@@ -314,3 +314,76 @@ body{
   }
 
 }
+@media (max-width: 768px) {
+
+  .login-container {
+    width: 95%;
+    height: auto;
+    flex-direction: column;
+    border-radius: 20px;
+  }
+
+  .left-panel,
+  .right-panel {
+    width: 100%;
+  }
+
+  .left-panel {
+    padding: 40px 20px;
+  }
+
+  .cp-logo {
+    width: 90px;
+    height: 90px;
+    font-size: 42px;
+    margin-bottom: 20px;
+  }
+
+  .left-panel h1 {
+    font-size: 34px;
+    text-align: center;
+  }
+
+  .left-panel p {
+    font-size: 16px;
+    text-align: center;
+  }
+
+  .right-panel {
+    padding: 30px 20px;
+  }
+
+  .welcome-title,
+  .right-panel h2 {
+    font-size: 38px;
+    text-align: center;
+    white-space: normal;
+  }
+
+  .wave {
+    text-align: center;
+    font-size: 32px;
+    margin: 10px 0 20px;
+  }
+
+  .right-panel input[type="email"],
+  .right-panel input[type="password"] {
+    height: 55px;
+    font-size: 16px;
+  }
+
+  .options {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .login-btn {
+    height: 55px;
+    font-size: 18px;
+  }
+
+  .signup {
+    font-size: 16px;
+  }
+}

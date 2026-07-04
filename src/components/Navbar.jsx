@@ -5,25 +5,26 @@ import {
 } from "react-icons/fa";
 
 function Navbar() {
+  const isMobile = window.innerWidth <= 768;
+
   return (
     <div
       style={{
-        height: "80px",
-
+        minHeight: "80px",
         background: "rgba(255,255,255,0.75)",
-
         backdropFilter: "blur(10px)",
 
         display: "flex",
+        flexDirection: isMobile ? "column" : "row",
         justifyContent: "space-between",
-        alignItems: "center",
+        alignItems: isMobile ? "stretch" : "center",
 
-        padding: "0 30px",
+        gap: "15px",
+
+        padding: isMobile ? "15px" : "0 30px",
 
         borderRadius: "16px",
-
         border: "1px solid rgba(255,255,255,0.4)",
-
         boxShadow: "0 8px 25px rgba(0,0,0,.06)",
       }}
     >
@@ -33,6 +34,7 @@ function Navbar() {
           style={{
             color: "#111827",
             fontWeight: "600",
+            margin: 0,
           }}
         >
           Hello, folks !
@@ -42,6 +44,7 @@ function Navbar() {
           style={{
             color: "#64748B",
             fontSize: "14px",
+            marginTop: "5px",
           }}
         >
           Manage your projects efficiently
@@ -53,7 +56,10 @@ function Navbar() {
         style={{
           display: "flex",
           alignItems: "center",
+          justifyContent: isMobile ? "space-between" : "flex-end",
           gap: "20px",
+          flexWrap: "wrap",
+          width: "100%",
         }}
       >
         {/* Search Box */}
@@ -68,9 +74,7 @@ function Navbar() {
 
             borderRadius: "14px",
 
-            width: "280px",
-
-            transition: "0.3s",
+            width: isMobile ? "100%" : "280px",
 
             boxShadow:
               "0 2px 8px rgba(0,0,0,.03)",
@@ -97,15 +101,11 @@ function Navbar() {
           style={{
             position: "relative",
             cursor: "pointer",
-            transition: "0.3s",
           }}
         >
           <FaBell
             size={22}
             color="#38BDF8"
-            style={{
-              animation: "bellRing 2s infinite",
-            }}
           />
 
           <span
@@ -113,17 +113,12 @@ function Navbar() {
               position: "absolute",
               top: "-8px",
               right: "-8px",
-
               background: "#EF4444",
-              color: "white",
-
+              color: "#fff",
               width: "18px",
               height: "18px",
-
               borderRadius: "50%",
-
               fontSize: "10px",
-
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
@@ -146,8 +141,6 @@ function Navbar() {
 
             background: "#F8FAFC",
 
-            transition: "0.3s",
-
             boxShadow:
               "0 2px 8px rgba(0,0,0,.03)",
           }}
@@ -162,6 +155,7 @@ function Navbar() {
               style={{
                 color: "#111827",
                 fontSize: "14px",
+                margin: 0,
               }}
             >
               Client User
@@ -171,6 +165,7 @@ function Navbar() {
               style={{
                 color: "#64748B",
                 fontSize: "12px",
+                margin: 0,
               }}
             >
               Premium Client

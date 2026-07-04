@@ -7,6 +7,8 @@ import {
 } from "react-icons/fa";
 
 function Sidebar() {
+  const isMobile = window.innerWidth <= 768;
+
   const menuItem = {
     display: "flex",
     alignItems: "center",
@@ -23,24 +25,27 @@ function Sidebar() {
   return (
     <div
       style={{
-        width: "280px",
-        height: "calc(100vh - 40px)",
+        width: isMobile ? "220px" : "280px",
+        height: isMobile ? "auto" : "calc(100vh - 40px)",
         overflowY: "auto",
-        position: "fixed",
-        left: "20px",
-        top: "20px",
+
+        position: isMobile ? "relative" : "fixed",
+
+        left: isMobile ? "0" : "20px",
+        top: isMobile ? "0" : "20px",
 
         background: "rgba(255,255,255,0.25)",
         backdropFilter: "blur(20px)",
 
         border: "1px solid rgba(255,255,255,0.4)",
 
-        borderRadius: "30px",
+        borderRadius: isMobile ? "15px" : "30px",
 
-        boxShadow:
-          "0 8px 32px rgba(31,38,135,0.15)",
+        boxShadow: "0 8px 32px rgba(31,38,135,0.15)",
 
-        padding: "25px",
+        padding: isMobile ? "15px" : "25px",
+
+        marginBottom: isMobile ? "20px" : "0",
       }}
     >
       <div
@@ -55,18 +60,14 @@ function Sidebar() {
             height: "90px",
             margin: "auto",
             borderRadius: "25px",
-
             background:
               "linear-gradient(135deg,#38bdf8,#60a5fa)",
-
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-
             color: "white",
             fontWeight: "bold",
             fontSize: "34px",
-
             animation: "float 3s ease-in-out infinite",
           }}
         >
