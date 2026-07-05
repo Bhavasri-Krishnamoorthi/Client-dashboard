@@ -124,3 +124,30 @@ input::placeholder{
 .page-container{
   animation:fadeIn .4s ease;
 }
+/* Responsive */
+
+@media (max-width:768px){
+
+body{
+overflow-x:hidden;
+}
+
+img{
+max-width:100%;
+height:auto;
+}
+
+table{
+display:block;
+overflow-x:auto;
+}
+
+input,
+button,
+select,
+textarea{
+width:100%;
+box-sizing:border-box;
+}
+
+}

@@ -8,6 +8,7 @@ import {projectDetails,projectStages,} from "../services/dashboardService";
 import {recentTransactions,} from "../services/paymentService";
 
 function ProjectDetailsPopup({ onClose }) {
+  const isMobile = window.innerWidth <= 768;
   return (
     <div
       style={{
@@ -23,7 +24,7 @@ function ProjectDetailsPopup({ onClose }) {
     >
       <div
         style={{
-          width: "620px",
+          width: isMobile ? "95%" : "620px",
           maxWidth: "100%",
           background: "#ffffff",
           borderRadius: "22px",
@@ -90,6 +91,7 @@ function ProjectDetailsPopup({ onClose }) {
           <div
             style={{
               display: "flex",
+              flexWrap:"wrap",
               justifyContent: "space-between",
               alignItems: "center",
               marginBottom: "24px",
@@ -151,7 +153,7 @@ function ProjectDetailsPopup({ onClose }) {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "1fr 1fr",
+              gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
               columnGap: "28px",
               rowGap: "18px",
               marginBottom: "26px",
@@ -300,6 +302,7 @@ function ProjectDetailsPopup({ onClose }) {
 }
 
 function MyProjectCard({ onViewDetails }) {
+  const isMobile = window.innerWidth <= 768;
   const stages = projectStages;
   const currentStageIndex = stages.findIndex((stage) => stage.current);
 
@@ -316,8 +319,10 @@ function MyProjectCard({ onViewDetails }) {
       <div
         style={{
           display: "flex",
+          flexDirection: isMobile ? "column" : "row",
           justifyContent: "space-between",
-          alignItems: "flex-start",
+          alignItems: isMobile ? "flex-start" : "flex-start",
+          gap: "20px",
           marginBottom: "26px",
         }}
       >
@@ -375,7 +380,9 @@ function MyProjectCard({ onViewDetails }) {
   <div
     style={{
       display: "grid",
-      gridTemplateColumns: `repeat(${stages.length}, minmax(0, 1fr))`,
+      gridTemplateColumns: isMobile
+        ? "1fr"
+        : `repeat(${stages.length}, minmax(0, 1fr))`,
       alignItems: "start",
       position: "relative",
     }}
@@ -478,7 +485,7 @@ function MyProjectCard({ onViewDetails }) {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "1fr 1fr",
+          gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
           gap: "20px",
           marginBottom: "22px",
         }}
@@ -544,6 +551,7 @@ function MyProjectCard({ onViewDetails }) {
 
 function RecentTransaction({ transactions }) {
   const navigate = useNavigate();
+  const isMobile = window.innerWidth <= 768;
   const [searchTerm, setSearchTerm] = useState("");
   const [showSearch, setShowSearch] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
@@ -589,8 +597,10 @@ function RecentTransaction({ transactions }) {
       <div
         style={{
           display: "flex",
+          flexDirection: isMobile ? "column" : "row",
           justifyContent: "space-between",
-          alignItems: "center",
+          alignItems: isMobile ? "stretch" : "center",
+          gap: "15px",
           marginBottom: 16,
         }}
       >
@@ -598,7 +608,15 @@ function RecentTransaction({ transactions }) {
           Recent Transaction
         </h2>
 
-        <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+        <div
+          style={{
+            display: "flex",
+            gap: 10,
+            alignItems: "center",
+            flexWrap: "wrap",
+            width: isMobile ? "100%" : "auto",
+          }}
+        >
   {/* Search */}
   <div style={{ position: "relative" }}>
     <button
@@ -932,6 +950,7 @@ function RecentTransaction({ transactions }) {
 
 
 function Dashboard() {
+  const isMobile = window.innerWidth <= 768;
   const [showProjectDetails, setShowProjectDetails] = useState(false);
 
   return (
