@@ -3,9 +3,8 @@ import { CiSearch } from "react-icons/ci";
 import { MdFilterList, MdMoreVert } from "react-icons/md";
 import { FiDownload } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import {projectDetails,projectStages,} from "../services/dashboardService";
-import {recentTransactions,} from "../services/paymentService";
+import { useState, useEffect } from "react";
+import { projectDetails, projectStages, } from "../services/dashboardService";
 
 function ProjectDetailsPopup({ onClose }) {
   const isMobile = window.innerWidth <= 768;
@@ -91,7 +90,7 @@ function ProjectDetailsPopup({ onClose }) {
           <div
             style={{
               display: "flex",
-              flexWrap:"wrap",
+              flexWrap: "wrap",
               justifyContent: "space-between",
               alignItems: "center",
               marginBottom: "24px",
@@ -370,117 +369,117 @@ function MyProjectCard({ onViewDetails }) {
           In Progress
         </span>
       </div>
-{/* Professional Stage Progress */}
-<div
-  style={{
-    margin: "34px 0 36px",
-    padding: "0 10px",
-  }}
->
-  <div
-    style={{
-      display: "grid",
-      gridTemplateColumns: isMobile
-        ? "1fr"
-        : `repeat(${stages.length}, minmax(0, 1fr))`,
-      alignItems: "start",
-      position: "relative",
-    }}
-  >
-    {stages.map((stage, index) => (
+      {/* Professional Stage Progress */}
       <div
-        key={stage.name}
         style={{
-          position: "relative",
-          textAlign: "center",
+          margin: "34px 0 36px",
+          padding: "0 10px",
         }}
       >
-        {/* Line between previous item and current item */}
-        {index !== 0 && (
-          <div
-            style={{
-              position: "absolute",
-              top: "18px",
-              left: "calc(-50% + 22px)",
-              width: "calc(100% - 44px)",
-              height: "4px",
-              borderRadius: "999px",
-              background:
-                index <= currentStageIndex
-                  ? "linear-gradient(90deg, #22c55e, #4ade80)"
-                  : "#e5e7eb",
-              zIndex: 1,
-            }}
-          />
-        )}
-
-        {/* Stage Circle */}
         <div
           style={{
-            width: "38px",
-            height: "38px",
-            borderRadius: "50%",
-            margin: "0 auto 10px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
+            display: "grid",
+            gridTemplateColumns: isMobile
+              ? "1fr"
+              : `repeat(${stages.length}, minmax(0, 1fr))`,
+            alignItems: "start",
             position: "relative",
-            zIndex: 2,
-            background: stage.completed
-              ? "#22c55e"
-              : stage.current
-              ? "#ffffff"
-              : "#f3f4f6",
-            border: stage.current
-              ? "4px solid #38bdf8"
-              : stage.completed
-              ? "4px solid #bbf7d0"
-              : "4px solid #e5e7eb",
-            color: stage.completed ? "#ffffff" : "#9ca3af",
-            fontSize: "15px",
-            fontWeight: "700",
-            boxShadow: stage.current
-              ? "0 0 0 6px rgba(56, 189, 248, 0.15)"
-              : stage.completed
-              ? "0 0 0 6px rgba(34, 197, 94, 0.12)"
-              : "none",
           }}
         >
-          {stage.completed ? "✓" : stage.current ? "" : ""}
+          {stages.map((stage, index) => (
+            <div
+              key={stage.name}
+              style={{
+                position: "relative",
+                textAlign: "center",
+              }}
+            >
+              {/* Line between previous item and current item */}
+              {index !== 0 && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "18px",
+                    left: "calc(-50% + 22px)",
+                    width: "calc(100% - 44px)",
+                    height: "4px",
+                    borderRadius: "999px",
+                    background:
+                      index <= currentStageIndex
+                        ? "linear-gradient(90deg, #22c55e, #4ade80)"
+                        : "#e5e7eb",
+                    zIndex: 1,
+                  }}
+                />
+              )}
+
+              {/* Stage Circle */}
+              <div
+                style={{
+                  width: "38px",
+                  height: "38px",
+                  borderRadius: "50%",
+                  margin: "0 auto 10px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  position: "relative",
+                  zIndex: 2,
+                  background: stage.completed
+                    ? "#22c55e"
+                    : stage.current
+                      ? "#ffffff"
+                      : "#f3f4f6",
+                  border: stage.current
+                    ? "4px solid #38bdf8"
+                    : stage.completed
+                      ? "4px solid #bbf7d0"
+                      : "4px solid #e5e7eb",
+                  color: stage.completed ? "#ffffff" : "#9ca3af",
+                  fontSize: "15px",
+                  fontWeight: "700",
+                  boxShadow: stage.current
+                    ? "0 0 0 6px rgba(56, 189, 248, 0.15)"
+                    : stage.completed
+                      ? "0 0 0 6px rgba(34, 197, 94, 0.12)"
+                      : "none",
+                }}
+              >
+                {stage.completed ? "✓" : stage.current ? "" : ""}
+              </div>
+
+              {/* Current stage inner dot */}
+              {stage.current && (
+                <div
+                  style={{
+                    width: "10px",
+                    height: "10px",
+                    borderRadius: "50%",
+                    background: "#38bdf8",
+                    position: "absolute",
+                    top: "14px",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    zIndex: 3,
+                  }}
+                />
+              )}
+
+              {/* Stage Name */}
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: "13px",
+                  color: stage.current ? "#0284c7" : "#6b7280",
+                  fontWeight: stage.current ? "700" : "500",
+                }}
+              >
+                {stage.name}
+              </p>
+            </div>
+          ))}
         </div>
-
-        {/* Current stage inner dot */}
-        {stage.current && (
-          <div
-            style={{
-              width: "10px",
-              height: "10px",
-              borderRadius: "50%",
-              background: "#38bdf8",
-              position: "absolute",
-              top: "14px",
-              left: "50%",
-              transform: "translateX(-50%)",
-              zIndex: 3,
-            }}
-          />
-        )}
-
-        {/* Stage Name */}
-        <p
-          style={{
-            margin: 0,
-            fontSize: "13px",
-            color: stage.current ? "#0284c7" : "#6b7280",
-            fontWeight: stage.current ? "700" : "500",
-          }}
-        >
-          {stage.name}
-        </p>
       </div>
-    ))}
-  </div>
-</div>
 
       <div
         style={{
@@ -549,7 +548,7 @@ function MyProjectCard({ onViewDetails }) {
   );
 }
 function RecentTransaction(
-{ transactions }) {
+  { transactions }) {
   const navigate = useNavigate();
   const isMobile = window.innerWidth <= 768;
   const [searchTerm, setSearchTerm] = useState("");
@@ -558,7 +557,7 @@ function RecentTransaction(
   const [showMenu, setShowMenu] = useState(false);
   const [filterStatus, setFilterStatus] = useState("All");
 
- const data = transactions || recentTransactions;
+  const data = transactions;
 
   const getStatusStyle = (status) => {
     switch (status) {
@@ -575,17 +574,17 @@ function RecentTransaction(
 
   const filteredData = data.filter((row) => {
     const matchesSearch =
-  (row.productName || row.title || "")
-    .toLowerCase()
-    .includes(searchTerm.toLowerCase()) ||
+      (row.productName || row.title || "")
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
 
-  (row.customer || "")
-    .toLowerCase()
-    .includes(searchTerm.toLowerCase()) ||
+      (row.customer || "")
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
 
-  (row.id || "")
-    .toLowerCase()
-    .includes(searchTerm.toLowerCase());
+      (row.id || "")
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
 
     const matchesStatus = filterStatus === "All" || row.status === filterStatus;
 
@@ -617,157 +616,157 @@ function RecentTransaction(
             width: isMobile ? "100%" : "auto",
           }}
         >
-  {/* Search */}
-  <div style={{ position: "relative" }}>
-    <button
-      onClick={() => setShowSearch(!showSearch)}
-      style={{
-        width: "42px",
-        height: "42px",
-        border: "1px solid #e5e7eb",
-        background: "#ffffff",
-        borderRadius: "10px",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        cursor: "pointer",
-      }}
-    >
-      <CiSearch size={20} color="#111827" />
-    </button>
-    {showSearch && (
-      <div
-        style={{
-          position: "absolute",
-          top: "calc(100% + 4px)",
-          left: 0,
-          background: "#fff",
-          border: "1px solid #eee",
-          borderRadius: 6,
-          boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-          minWidth: 300,
-          zIndex: 10,
-          padding: "12px",
-        }}
-      >
-        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-          {/* Search Icon Box */}
-          <div
-            style={{
-              width: "42px",
-              height: "42px",
-              border: "1px solid #ddd",
-              borderRadius: "6px",
-              background: "#f8f9fa",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              fontSize: "20px",
-              color: "#666",
-              flexShrink: 0,
-            }}
-          >
-            <CiSearch size={20} color="#666" />
-          </div>
-
-          {/* Search Input */}
-          <input
-            type="text"
-            placeholder="Search..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            style={{
-              flex: 1,
-              padding: "10px 12px",
-              border: "1px solid #ddd",
-              borderRadius: "6px",
-              fontSize: "14px",
-            }}
-            autoFocus
-          />
-        </div>
-      </div>
-    )}
-  </div>
-
-{/* Filter */}
-  <div style={{ position: "relative" }}>
-    <button
-      onClick={() => setShowFilter(!showFilter)}
-      style={{
-        width: "42px",
-        height: "42px",
-        border: "1px solid #e5e7eb",
-        background: "#ffffff",
-        borderRadius: "10px",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        cursor: "pointer",
-      }}
-    >
-      <MdFilterList size={20} color="#111827" />
-    </button>
-    {showFilter && (
-      <div
-        style={{
-          position: "absolute",
-          top: "calc(100% + 4px)",
-          left: 0,
-          background: "#fff",
-          border: "1px solid #eee",
-          borderRadius: 6,
-          boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-          minWidth: 280,
-          zIndex: 10,
-          padding: "12px",
-        }}
-      >
-        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-          {["All", "Completed", "Pending", "Cancelled"].map((status) => (
+          {/* Search */}
+          <div style={{ position: "relative" }}>
             <button
-              key={status}
-              onClick={() => setFilterStatus(status)}
+              onClick={() => setShowSearch(!showSearch)}
               style={{
-                padding: "10px 14px",
-                border:
-                  filterStatus === status
-                    ? "1px solid #111"
-                    : "1px solid #ddd",
-                background: filterStatus === status ? "#111" : "#fff",
-                color: filterStatus === status ? "#fff" : "#333",
-                borderRadius: 6,
+                width: "42px",
+                height: "42px",
+                border: "1px solid #e5e7eb",
+                background: "#ffffff",
+                borderRadius: "10px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
                 cursor: "pointer",
-                fontSize: 13,
-                fontWeight: filterStatus === status ? "600" : "400",
-                transition: "all 0.2s ease",
               }}
             >
-              {status}
+              <CiSearch size={20} color="#111827" />
             </button>
-          ))}
-        </div>
-      </div>
-    )}
-  </div>
+            {showSearch && (
+              <div
+                style={{
+                  position: "absolute",
+                  top: "calc(100% + 4px)",
+                  left: 0,
+                  background: "#fff",
+                  border: "1px solid #eee",
+                  borderRadius: 6,
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+                  minWidth: 300,
+                  zIndex: 10,
+                  padding: "12px",
+                }}
+              >
+                <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                  {/* Search Icon Box */}
+                  <div
+                    style={{
+                      width: "42px",
+                      height: "42px",
+                      border: "1px solid #ddd",
+                      borderRadius: "6px",
+                      background: "#f8f9fa",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      fontSize: "20px",
+                      color: "#666",
+                      flexShrink: 0,
+                    }}
+                  >
+                    <CiSearch size={20} color="#666" />
+                  </div>
+
+                  {/* Search Input */}
+                  <input
+                    type="text"
+                    placeholder="Search..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    style={{
+                      flex: 1,
+                      padding: "10px 12px",
+                      border: "1px solid #ddd",
+                      borderRadius: "6px",
+                      fontSize: "14px",
+                    }}
+                    autoFocus
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Filter */}
+          <div style={{ position: "relative" }}>
+            <button
+              onClick={() => setShowFilter(!showFilter)}
+              style={{
+                width: "42px",
+                height: "42px",
+                border: "1px solid #e5e7eb",
+                background: "#ffffff",
+                borderRadius: "10px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                cursor: "pointer",
+              }}
+            >
+              <MdFilterList size={20} color="#111827" />
+            </button>
+            {showFilter && (
+              <div
+                style={{
+                  position: "absolute",
+                  top: "calc(100% + 4px)",
+                  left: 0,
+                  background: "#fff",
+                  border: "1px solid #eee",
+                  borderRadius: 6,
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+                  minWidth: 280,
+                  zIndex: 10,
+                  padding: "12px",
+                }}
+              >
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                  {["All", "Completed", "Pending", "Cancelled"].map((status) => (
+                    <button
+                      key={status}
+                      onClick={() => setFilterStatus(status)}
+                      style={{
+                        padding: "10px 14px",
+                        border:
+                          filterStatus === status
+                            ? "1px solid #111"
+                            : "1px solid #ddd",
+                        background: filterStatus === status ? "#111" : "#fff",
+                        color: filterStatus === status ? "#fff" : "#333",
+                        borderRadius: 6,
+                        cursor: "pointer",
+                        fontSize: 13,
+                        fontWeight: filterStatus === status ? "600" : "400",
+                        transition: "all 0.2s ease",
+                      }}
+                    >
+                      {status}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
 
           <div style={{ position: "relative" }}>
-           <button
-  onClick={() => setShowMenu(!showMenu)}
-  style={{
-    width: "42px",
-    height: "42px",
-    border: "1px solid #e5e7eb",
-    background: "#fff",
-    borderRadius: "10px",
-    fontSize: "22px",
-    fontWeight: "bold",
-    color: "#111827",
-    cursor: "pointer",
-  }}
->
-  ⋮
-</button>
+            <button
+              onClick={() => setShowMenu(!showMenu)}
+              style={{
+                width: "42px",
+                height: "42px",
+                border: "1px solid #e5e7eb",
+                background: "#fff",
+                borderRadius: "10px",
+                fontSize: "22px",
+                fontWeight: "bold",
+                color: "#111827",
+                cursor: "pointer",
+              }}
+            >
+              ⋮
+            </button>
 
             {showMenu && (
               <div
@@ -816,7 +815,7 @@ function RecentTransaction(
             )}
           </div>
 
-           <button
+          <button
             style={{
               background: "#111",
               color: "#fff",
@@ -952,6 +951,35 @@ function RecentTransaction(
 function Dashboard() {
   const isMobile = window.innerWidth <= 768;
   const [showProjectDetails, setShowProjectDetails] = useState(false);
+  const [transactions, setTransactions] = useState([]);
+  useEffect(() => {
+    loadTransactions();
+  }, []);
+
+  const loadTransactions = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/v2/payments"
+      );
+
+      const result = await response.json();
+
+      const formatted = result.data.map((item) => ({
+        id: item.id,
+        title: item.payment_name,
+        customer: item.customer_name,
+        amount: Number(item.amount),
+        status: item.status,
+        dateTime: new Date(item.created_at).toLocaleString(),
+        price: `₹${Number(item.amount).toLocaleString()}`
+      }));
+
+      setTransactions(formatted);
+
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <MainLayout>
@@ -970,7 +998,7 @@ function Dashboard() {
 
         <MyProjectCard onViewDetails={() => setShowProjectDetails(true)} />
 
-        <RecentTransaction />
+        <RecentTransaction transactions={transactions} />
       </div>
 
       {showProjectDetails && (

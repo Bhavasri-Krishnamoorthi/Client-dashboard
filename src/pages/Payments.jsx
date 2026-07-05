@@ -3,6 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 import "./PaymentPage.css";
 import MainLayout from "../layouts/MainLayout";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const paymentData = {
   projectId: "PRJ-2024-001",
@@ -47,10 +49,12 @@ function Payments() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [transactions, setTransactions] = useState([]);
+  const [timeline, setTimeline] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     loadPayments();
+    loadTimeline();
   }, []);
 
   const loadPayments = async () => {
@@ -84,11 +88,28 @@ function Payments() {
         ],
       }));
 
+      console.log(formatted);
+
       setTransactions(formatted);
     } catch (err) {
       console.log(err);
     } finally {
       setLoading(false);
+    }
+  };
+  const loadTimeline = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/v2/payments/timeline/${paymentData.projectId}`
+      );
+
+      const result = await response.json();
+
+      if (result.success) {
+        setTimeline(result.data);
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -105,9 +126,10 @@ function Payments() {
   );
   console.log("Route ID:", id);
   console.log("Transactions:", transactions);
+  console.log("Selected Transaction:", selectedTransaction);
 
   const selectedPayment =
-    paymentData.milestones.find(
+     timeline.find(
       (item) =>
         item.id === Number(selectedMilestone)
     );
@@ -117,12 +139,12 @@ function Payments() {
 
   const handlePayNow = async () => {
     if (!selectedMilestone) {
-      alert("Select Payment");
+      toast.warning("Select Payment");
       return;
     }
 
     if (!paymentMethod) {
-      alert("Select Payment Method");
+      toast.warning("Select Payment Method");
       return;
     }
 
@@ -148,18 +170,19 @@ function Payments() {
       const result = await response.json();
 
       if (result.success) {
-        alert("✅ Payment Created Successfully");
+        toast.success("Payment Created Successfully");
 
         loadPayments();
+        loadTimeline();
 
         setSelectedMilestone("");
         setPaymentMethod("");
       } else {
-        alert(result.message);
+        toast.error(result.message);
       }
     } catch (err) {
       console.error(err);
-      alert("Something went wrong");
+      toast.error("Something went wrong");
     }
   };
   if (loading) {
@@ -424,52 +447,51 @@ function Payments() {
               </h3>
 
               <div className="timeline">
-                {paymentData.milestones.map(
-                  (item) => (
+                {timeline.map((item) => (
+                  <div
+                    key={item.id}
+                    className="timeline-item"
+                  >
                     <div
-                      key={item.id}
-                      className="timeline-item"
-                    >
-                      <div
-                        className={`timeline-dot ${item.status ===
-                          "Paid"
-                          ? "dot-paid"
-                          : "dot-pending"
-                          }`}
-                      ></div>
+                      className={`timeline-dot ${item.status ===
+                        "Paid"
+                        ? "dot-paid"
+                        : "dot-pending"
+                        }`}
+                    ></div>
 
-                      <div className="timeline-content">
-                        <h4>
-                          {
-                            item.title
-                          }
-                        </h4>
-
-                        <p>
-                          ₹
-                          {item.amount.toLocaleString()}
-                        </p>
-
-                        <small>
-                          Due Date :
-                          {
-                            item.dueDate
-                          }
-                        </small>
-                      </div>
-
-                      <span
-                        className={
-                          item.status ===
-                            "Paid"
-                            ? "status paid"
-                            : "status pending"
+                    <div className="timeline-content">
+                      <h4>
+                        {
+                          item.title
                         }
-                      >
-                        {item.status}
-                      </span>
+                      </h4>
+
+                      <p>
+                        ₹
+                        {item.amount.toLocaleString()}
+                      </p>
+
+                      <small>
+                        Due Date :
+                        {
+                          item.dueDate
+                        }
+                      </small>
                     </div>
-                  )
+
+                    <span
+                      className={
+                        item.status ===
+                          "Paid"
+                          ? "status paid"
+                          : "status pending"
+                      }
+                    >
+                      {item.status}
+                    </span>
+                  </div>
+                )
                 )}
               </div>
             </div>
@@ -494,7 +516,7 @@ function Payments() {
                     Select Payment
                   </option>
 
-                  {paymentData.milestones
+                  {timeline
                     .filter(
                       (
                         item
@@ -574,6 +596,10 @@ function Payments() {
           </>
         )}
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+      />
     </MainLayout>
   );
 }
