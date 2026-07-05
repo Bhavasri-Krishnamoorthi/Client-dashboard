@@ -4,6 +4,7 @@ import {
   addPayment,
   updatePayment,
   deletePayment,
+  getProjectTimeline,
 } from "../models/payment.model.js";
 
 // Get all payments
@@ -29,4 +30,9 @@ export const editPayment = (id, paymentData, callback) => {
 // Delete payment
 export const removePayment = (id, callback) => {
   deletePayment(id, callback);
+};
+
+// Get Project Timeline
+export const fetchProjectTimeline = (projectId, callback) => {
+  getProjectTimeline(projectId, callback);
 };

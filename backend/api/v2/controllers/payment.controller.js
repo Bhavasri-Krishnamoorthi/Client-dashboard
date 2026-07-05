@@ -4,6 +4,7 @@ import {
   createPayment as createPaymentService,
   editPayment,
   removePayment,
+  fetchProjectTimeline,
 } from "../services/payment.service.js";
 
 // GET ALL PAYMENTS
@@ -101,6 +102,25 @@ export const deletePayment = (req, res) => {
     res.status(200).json({
       success: true,
       message: "Payment Deleted Successfully",
+    });
+  });
+};
+
+// GET PROJECT TIMELINE
+export const getProjectTimeline = (req, res) => {
+  const { projectId } = req.params;
+
+  fetchProjectTimeline(projectId, (err, data) => {
+    if (err) {
+      return res.status(500).json({
+        success: false,
+        message: err.message,
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data,
     });
   });
 };

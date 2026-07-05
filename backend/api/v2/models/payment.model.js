@@ -102,3 +102,24 @@ export const deletePayment = (id, callback) => {
     callback
   );
 };
+// Get Project Timeline
+export const getProjectTimeline = (projectId, callback) => {
+  const sql = `
+    SELECT
+      id,
+      project_id,
+      title,
+      amount,
+      due_date,
+      status
+    FROM project_timeline
+    WHERE project_id = ?
+    ORDER BY due_date ASC
+  `;
+
+  db.query(sql, [projectId], (err, results) => {
+    if (err) return callback(err);
+
+    callback(null, results);
+  });
+};
