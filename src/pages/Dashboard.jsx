@@ -548,8 +548,8 @@ function MyProjectCard({ onViewDetails }) {
     </div>
   );
 }
-
-function RecentTransaction({ transactions }) {
+function RecentTransaction(
+{ transactions }) {
   const navigate = useNavigate();
   const isMobile = window.innerWidth <= 768;
   const [searchTerm, setSearchTerm] = useState("");

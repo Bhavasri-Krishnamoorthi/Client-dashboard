@@ -1,11 +1,13 @@
 import express from "express";
 import authRoutes from "./auth.routes.js";
 import dashboardRoutes from "./dashboard.routes.js";
+import paymentRoutes from "./payment.routes.js";
 
 const router = express.Router();
 
 router.use("/auth", authRoutes);
 router.use("/dashboard", dashboardRoutes);
+router.use("/payments", paymentRoutes);
 
 router.get("/", (req, res) => {
   res.json({

@@ -1,20 +1,96 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 import "./PaymentPage.css";
 import MainLayout from "../layouts/MainLayout";
 
-import {
-  getPaymentData,
-  recentTransactions,
-} from "../services/paymentService";
+const paymentData = {
+  projectId: "PRJ-2024-001",
+  totalAmount: 125000,
+  paidAmount: 75000,
+  pendingAmount: 50000,
 
-const paymentData = getPaymentData();
-const transactions = recentTransactions;
+  milestones: [
+    {
+      id: 1,
+      title: "Advance Payment",
+      amount: 25000,
+      dueDate: "10 Apr 2024",
+      status: "Paid",
+    },
+    {
+      id: 2,
+      title: "Design Approval",
+      amount: 25000,
+      dueDate: "25 Apr 2024",
+      status: "Paid",
+    },
+    {
+      id: 3,
+      title: "Development Start",
+      amount: 25000,
+      dueDate: "15 May 2024",
+      status: "Paid",
+    },
+    {
+      id: 4,
+      title: "Final Payment",
+      amount: 50000,
+      dueDate: "15 Jun 2025",
+      status: "Pending",
+    },
+  ],
+};
+
 
 function Payments() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [transactions, setTransactions] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadPayments();
+  }, []);
+
+  const loadPayments = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/v2/payments"
+      );
+
+      const result = await response.json();
+      console.log(result);
+
+      const formatted = result.data.map((item) => ({
+        id: item.id,
+        transaction_id: item.transaction_id,
+        title: item.payment_name,
+        customer: item.customer_name,
+        amount: Number(item.amount),
+        paymentMethod: item.payment_method,
+        status: item.status,
+        progress:
+          item.status === "Completed"
+            ? 100
+            : item.status === "Pending"
+              ? 50
+              : 0,
+        timeline: [
+          {
+            step: "Payment Created",
+            date: new Date(item.created_at).toLocaleString(),
+          },
+        ],
+      }));
+
+      setTransactions(formatted);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const isTransactionView = !!id;
 
@@ -24,10 +100,11 @@ function Payments() {
   const [paymentMethod, setPaymentMethod] =
     useState("");
 
-  const selectedTransaction =
-    transactions.find(
-      (item) => item.id === id
-    );
+  const selectedTransaction = transactions.find(
+    (item) => String(item.id) === String(id)
+  );
+  console.log("Route ID:", id);
+  console.log("Transactions:", transactions);
 
   const selectedPayment =
     paymentData.milestones.find(
@@ -38,7 +115,7 @@ function Payments() {
   const progress =
     selectedTransaction?.progress || 0;
 
-  const handlePayNow = () => {
+  const handlePayNow = async () => {
     if (!selectedMilestone) {
       alert("Select Payment");
       return;
@@ -49,14 +126,57 @@ function Payments() {
       return;
     }
 
-    alert(
-      `Payment : ${selectedPayment.title}
-Amount : ₹${selectedPayment.amount.toLocaleString()}
-Method : ${paymentMethod}
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/v2/payments",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            transaction_id: `TXN${Date.now()}`,
+            payment_name: selectedPayment.title,
+            customer_name: "Bharath",
+            amount: selectedPayment.amount,
+            payment_method: paymentMethod,
+            status: "Pending",
+          }),
+        }
+      );
 
-Razorpay Integration Pending`
-    );
+      const result = await response.json();
+
+      if (result.success) {
+        alert("✅ Payment Created Successfully");
+
+        loadPayments();
+
+        setSelectedMilestone("");
+        setPaymentMethod("");
+      } else {
+        alert(result.message);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong");
+    }
   };
+  if (loading) {
+    return (
+      <MainLayout>
+        <div
+          style={{
+            padding: "40px",
+            textAlign: "center",
+            fontSize: "22px",
+          }}
+        >
+          Loading Payments...
+        </div>
+      </MainLayout>
+    );
+  }
 
   return (
     <MainLayout>
@@ -116,7 +236,7 @@ Razorpay Integration Pending`
 
                     <h4>
                       {
-                        selectedTransaction.id
+                        selectedTransaction.transaction_id
                       }
                     </h4>
                   </div>
