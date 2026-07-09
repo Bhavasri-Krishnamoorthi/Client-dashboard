@@ -7,6 +7,7 @@ import {
   updatePayment,
   deletePayment,
   getProjectTimeline,
+  updateTimeline,
 } from "../controllers/payment.controller.js";
 
 const router = express.Router();
@@ -21,6 +22,9 @@ router.get("/:id", getPayment);
 
 // CREATE payment
 router.post("/", createPayment);
+
+// UPDATE Timeline Status
+router.put("/timeline/status", updateTimeline);
 
 // UPDATE payment
 router.put("/:id", updatePayment);

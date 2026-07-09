@@ -5,6 +5,7 @@ import {
   updatePayment,
   deletePayment,
   getProjectTimeline,
+  updateTimelineStatus,
 } from "../models/payment.model.js";
 
 // Get all payments
@@ -35,4 +36,17 @@ export const removePayment = (id, callback) => {
 // Get Project Timeline
 export const fetchProjectTimeline = (projectId, callback) => {
   getProjectTimeline(projectId, callback);
+};
+
+// Update Timeline Status
+export const changeTimelineStatus = (
+  projectId,
+  title,
+  callback
+) => {
+  updateTimelineStatus(
+    projectId,
+    title,
+    callback
+  );
 };

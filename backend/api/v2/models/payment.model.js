@@ -102,6 +102,20 @@ export const deletePayment = (id, callback) => {
     callback
   );
 };
+// Update Timeline Status
+export const updateTimelineStatus = (
+  projectId,
+  title,
+  callback
+) => {
+  const sql = `
+    UPDATE project_timeline
+    SET status='Paid'
+    WHERE project_id=? AND title=?
+  `;
+
+  db.query(sql, [projectId, title], callback);
+};
 // Get Project Timeline
 export const getProjectTimeline = (projectId, callback) => {
   const sql = `

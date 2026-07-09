@@ -129,7 +129,7 @@ function Payments() {
   console.log("Selected Transaction:", selectedTransaction);
 
   const selectedPayment =
-     timeline.find(
+    timeline.find(
       (item) =>
         item.id === Number(selectedMilestone)
     );
@@ -168,6 +168,19 @@ function Payments() {
       );
 
       const result = await response.json();
+      await fetch(
+        "http://localhost:5000/api/v2/payments/timeline/status",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            projectId: paymentData.projectId,
+            title: selectedPayment.title,
+          }),
+        }
+      );
 
       if (result.success) {
         toast.success("Payment Created Successfully");
@@ -473,10 +486,12 @@ function Payments() {
                       </p>
 
                       <small>
-                        Due Date :
-                        {
-                          item.dueDate
-                        }
+                        Due Date :{" "}
+                        {new Date(item.due_date).toLocaleDateString("en-IN", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric",
+                        })}
                       </small>
                     </div>
 

@@ -5,6 +5,7 @@ import {
   editPayment,
   removePayment,
   fetchProjectTimeline,
+  changeTimelineStatus,
 } from "../services/payment.service.js";
 
 // GET ALL PAYMENTS
@@ -105,6 +106,27 @@ export const deletePayment = (req, res) => {
     });
   });
 };
+
+
+// UPDATE TIMELINE STATUS
+export const updateTimeline = (req, res) => {
+  const { projectId, title } = req.body;
+
+  changeTimelineStatus(projectId, title, (err) => {
+    if (err) {
+      return res.status(500).json({
+        success: false,
+        message: err.message,
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Timeline Updated Successfully",
+    });
+  });
+};
+
 
 // GET PROJECT TIMELINE
 export const getProjectTimeline = (req, res) => {
