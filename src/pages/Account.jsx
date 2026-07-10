@@ -1,17 +1,16 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "../services/api";
 import "./Account.css";
 
 function Account() {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    clientId: "",
-    clientName: "",
+    full_name: "",
     email: "",
-    mobile: "",
+    phone: "",
     company: "",
-    address: "",
     password: "",
   });
 
@@ -22,15 +21,34 @@ function Account() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    localStorage.setItem(
-      "clientProfile",
-      JSON.stringify(formData)
-    );
+    try {
+      const response = await api.post(
+        "/auth/register",
+        formData
+      );
 
-    navigate("/dashboard");
+      if (response.data.success) {
+        alert(
+          `Account Created Successfully!\nClient ID: ${response.data.client_id}`
+        );
+
+        navigate("/");
+      } else {
+        alert(response.data.message);
+      }
+
+    } catch (error) {
+  console.log(error);
+
+  if (error.response) {
+    alert(error.response.data.message);
+  } else {
+    alert(error.message);
+  }
+}
   };
 
   return (
@@ -62,18 +80,9 @@ function Account() {
 
             <input
               type="text"
-              name="clientId"
-              placeholder="Client ID"
-              value={formData.clientId}
-              onChange={handleChange}
-              required
-            />
-
-            <input
-              type="text"
-              name="clientName"
+              name="full_name"
               placeholder="Client Name"
-              value={formData.clientName}
+              value={formData.full_name}
               onChange={handleChange}
               required
             />
@@ -89,9 +98,9 @@ function Account() {
 
             <input
               type="text"
-              name="mobile"
+              name="phone"
               placeholder="Mobile Number"
-              value={formData.mobile}
+              value={formData.phone}
               onChange={handleChange}
               required
             />
@@ -101,14 +110,6 @@ function Account() {
               name="company"
               placeholder="Company Name"
               value={formData.company}
-              onChange={handleChange}
-              required
-            />
-
-            <textarea
-              name="address"
-              placeholder="Project Address"
-              value={formData.address}
               onChange={handleChange}
               required
             />

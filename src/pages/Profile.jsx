@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
-import "./Profile.css";
 import MainLayout from "../layouts/MainLayout";
-import {
-  getProfile,
-  saveProfile,
-} from "../services/profileService";
+import api from "../services/api";
+import "./Profile.css";
 
 function Profile() {
-
   const navigate = useNavigate();
 
   const [isEditing, setIsEditing] = useState(false);
@@ -23,19 +19,28 @@ function Profile() {
     companyName: "",
   });
 
-  useEffect(() => {
-    const storedData = getProfile();
+  // Load Profile
+  const loadProfile = async () => {
+    try {
+      const response = await api.get("/profile/CL001");
 
-    if (storedData) {
+      const data = response.data.data;
+
       setProfile({
-        clientId: storedData.clientId || "",
-        clientName: storedData.clientName || "",
-        email: storedData.email || "",
-        mobile: storedData.mobile || "",
-        projectAddress: storedData.address || "",
-        companyName: storedData.company || "",
+        clientId: data.client_id || "",
+        clientName: data.full_name || "",
+        email: data.email || "",
+        mobile: data.phone || "",
+        projectAddress: "",
+        companyName: data.company || "",
       });
+    } catch (error) {
+      console.log(error);
     }
+  };
+
+  useEffect(() => {
+    loadProfile();
   }, []);
 
   const handleChange = (e) => {
@@ -49,19 +54,23 @@ function Profile() {
     setIsEditing(true);
   };
 
-  const handleSave = () => {
-    const updatedData = {
-      clientId: profile.clientId,
-      clientName: profile.clientName,
-      email: profile.email,
-      mobile: profile.mobile,
-      company: profile.companyName,
-      address: profile.projectAddress,
-    };
+  const handleSave = async () => {
+    try {
+      await api.put(`/profile/${profile.clientId}`, {
+        full_name: profile.clientName,
+        phone: profile.mobile,
+        company: profile.companyName,
+      });
 
-    saveProfile(updatedData);
+      alert("Profile Updated Successfully");
 
-    setIsEditing(false);
+      setIsEditing(false);
+
+      loadProfile();
+    } catch (error) {
+      console.log(error);
+      alert("Failed to update profile");
+    }
   };
 
   return (
@@ -117,16 +126,7 @@ function Profile() {
             <div className="info-card">
               <label>Email</label>
 
-              {isEditing ? (
-                <input
-                  type="email"
-                  name="email"
-                  value={profile.email}
-                  onChange={handleChange}
-                />
-              ) : (
-                <h3>{profile.email}</h3>
-              )}
+              <h3>{profile.email}</h3>
             </div>
 
             <div className="info-card">
@@ -147,15 +147,7 @@ function Profile() {
             <div className="info-card large-card">
               <label>Project Address</label>
 
-              {isEditing ? (
-                <textarea
-                  name="projectAddress"
-                  value={profile.projectAddress}
-                  onChange={handleChange}
-                />
-              ) : (
-                <h3>{profile.projectAddress}</h3>
-              )}
+              <h3>{profile.projectAddress || "Not Available"}</h3>
             </div>
 
             <div className="info-card large-card">

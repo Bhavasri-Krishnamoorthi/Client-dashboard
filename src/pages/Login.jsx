@@ -1,13 +1,44 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "../services/api";
 import "./Login.css";
 
 function Login() {
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-    navigate("/dashboard");
+
+    try {
+      const response = await api.post("/auth/login", {
+        email,
+        password,
+      });
+
+      if (response.data.success) {
+        // Save client details if returned from backend
+        if (response.data.user) {
+          localStorage.setItem(
+            "loggedInUser",
+            JSON.stringify(response.data.user)
+          );
+        }
+
+        alert("Login Successful");
+
+        navigate("/dashboard");
+      } else {
+        alert(response.data.message);
+      }
+
+    } catch (error) {
+      console.error(error);
+
+      alert("Invalid Email or Password");
+    }
   };
 
   const handleCreateAccount = () => {
@@ -43,12 +74,16 @@ function Login() {
             <input
               type="email"
               placeholder="Enter Email Address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
 
             <input
               type="password"
               placeholder="Enter Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
             />
 
@@ -79,7 +114,7 @@ function Login() {
                   color: "#4c9ef2",
                   cursor: "pointer",
                   fontWeight: "600",
-                  marginLeft: "5px"
+                  marginLeft: "5px",
                 }}
               >
                 Create Account

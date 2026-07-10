@@ -28,9 +28,10 @@ export const registerUser = async (userData, callback) => {
         if (err) return callback(err);
 
         callback(null, {
-          success: true,
-          message: "User Registered Successfully",
-        });
+    success: true,
+    message: "User Registered Successfully",
+    client_id: newClientId,
+});
       });
     });
   } catch (error) {
