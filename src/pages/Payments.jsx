@@ -1,20 +1,117 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 import "./PaymentPage.css";
 import MainLayout from "../layouts/MainLayout";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-import {
-  getPaymentData,
-  recentTransactions,
-} from "../services/paymentService";
+const paymentData = {
+  projectId: "PRJ-2024-001",
+  totalAmount: 125000,
+  paidAmount: 75000,
+  pendingAmount: 50000,
 
-const paymentData = getPaymentData();
-const transactions = recentTransactions;
+  milestones: [
+    {
+      id: 1,
+      title: "Advance Payment",
+      amount: 25000,
+      dueDate: "10 Apr 2024",
+      status: "Paid",
+    },
+    {
+      id: 2,
+      title: "Design Approval",
+      amount: 25000,
+      dueDate: "25 Apr 2024",
+      status: "Paid",
+    },
+    {
+      id: 3,
+      title: "Development Start",
+      amount: 25000,
+      dueDate: "15 May 2024",
+      status: "Paid",
+    },
+    {
+      id: 4,
+      title: "Final Payment",
+      amount: 50000,
+      dueDate: "15 Jun 2025",
+      status: "Pending",
+    },
+  ],
+};
+
 
 function Payments() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [transactions, setTransactions] = useState([]);
+  const [timeline, setTimeline] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadPayments();
+    loadTimeline();
+  }, []);
+
+  const loadPayments = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/v2/payments"
+      );
+
+      const result = await response.json();
+      console.log(result);
+
+      const formatted = result.data.map((item) => ({
+        id: item.id,
+        transaction_id: item.transaction_id,
+        title: item.payment_name,
+        customer: item.customer_name,
+        amount: Number(item.amount),
+        paymentMethod: item.payment_method,
+        status: item.status,
+        progress:
+          item.status === "Completed"
+            ? 100
+            : item.status === "Pending"
+              ? 50
+              : 0,
+        timeline: [
+          {
+            step: "Payment Created",
+            date: new Date(item.created_at).toLocaleString(),
+          },
+        ],
+      }));
+
+      console.log(formatted);
+
+      setTransactions(formatted);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const loadTimeline = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/v2/payments/timeline/${paymentData.projectId}`
+      );
+
+      const result = await response.json();
+
+      if (result.success) {
+        setTimeline(result.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const isTransactionView = !!id;
 
@@ -24,13 +121,15 @@ function Payments() {
   const [paymentMethod, setPaymentMethod] =
     useState("");
 
-  const selectedTransaction =
-    transactions.find(
-      (item) => item.id === id
-    );
+  const selectedTransaction = transactions.find(
+    (item) => String(item.id) === String(id)
+  );
+  console.log("Route ID:", id);
+  console.log("Transactions:", transactions);
+  console.log("Selected Transaction:", selectedTransaction);
 
   const selectedPayment =
-    paymentData.milestones.find(
+    timeline.find(
       (item) =>
         item.id === Number(selectedMilestone)
     );
@@ -38,25 +137,82 @@ function Payments() {
   const progress =
     selectedTransaction?.progress || 0;
 
-  const handlePayNow = () => {
+  const handlePayNow = async () => {
     if (!selectedMilestone) {
-      alert("Select Payment");
+      toast.warning("Select Payment");
       return;
     }
 
     if (!paymentMethod) {
-      alert("Select Payment Method");
+      toast.warning("Select Payment Method");
       return;
     }
 
-    alert(
-      `Payment : ${selectedPayment.title}
-Amount : ₹${selectedPayment.amount.toLocaleString()}
-Method : ${paymentMethod}
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/v2/payments",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            transaction_id: `TXN${Date.now()}`,
+            payment_name: selectedPayment.title,
+            customer_name: "Bharath",
+            amount: selectedPayment.amount,
+            payment_method: paymentMethod,
+            status: "Pending",
+          }),
+        }
+      );
 
-Razorpay Integration Pending`
-    );
+      const result = await response.json();
+      await fetch(
+        "http://localhost:5000/api/v2/payments/timeline/status",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            projectId: paymentData.projectId,
+            title: selectedPayment.title,
+          }),
+        }
+      );
+
+      if (result.success) {
+        toast.success("Payment Created Successfully");
+
+        loadPayments();
+        loadTimeline();
+
+        setSelectedMilestone("");
+        setPaymentMethod("");
+      } else {
+        toast.error(result.message);
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Something went wrong");
+    }
   };
+  if (loading) {
+    return (
+      <MainLayout>
+        <div
+          style={{
+            padding: "40px",
+            textAlign: "center",
+            fontSize: "22px",
+          }}
+        >
+          Loading Payments...
+        </div>
+      </MainLayout>
+    );
+  }
 
   return (
     <MainLayout>
@@ -116,7 +272,7 @@ Razorpay Integration Pending`
 
                     <h4>
                       {
-                        selectedTransaction.id
+                        selectedTransaction.transaction_id
                       }
                     </h4>
                   </div>
@@ -304,52 +460,53 @@ Razorpay Integration Pending`
               </h3>
 
               <div className="timeline">
-                {paymentData.milestones.map(
-                  (item) => (
+                {timeline.map((item) => (
+                  <div
+                    key={item.id}
+                    className="timeline-item"
+                  >
                     <div
-                      key={item.id}
-                      className="timeline-item"
-                    >
-                      <div
-                        className={`timeline-dot ${item.status ===
-                          "Paid"
-                          ? "dot-paid"
-                          : "dot-pending"
-                          }`}
-                      ></div>
+                      className={`timeline-dot ${item.status ===
+                        "Paid"
+                        ? "dot-paid"
+                        : "dot-pending"
+                        }`}
+                    ></div>
 
-                      <div className="timeline-content">
-                        <h4>
-                          {
-                            item.title
-                          }
-                        </h4>
-
-                        <p>
-                          ₹
-                          {item.amount.toLocaleString()}
-                        </p>
-
-                        <small>
-                          Due Date :
-                          {
-                            item.dueDate
-                          }
-                        </small>
-                      </div>
-
-                      <span
-                        className={
-                          item.status ===
-                            "Paid"
-                            ? "status paid"
-                            : "status pending"
+                    <div className="timeline-content">
+                      <h4>
+                        {
+                          item.title
                         }
-                      >
-                        {item.status}
-                      </span>
+                      </h4>
+
+                      <p>
+                        ₹
+                        {item.amount.toLocaleString()}
+                      </p>
+
+                      <small>
+                        Due Date :{" "}
+                        {new Date(item.due_date).toLocaleDateString("en-IN", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric",
+                        })}
+                      </small>
                     </div>
-                  )
+
+                    <span
+                      className={
+                        item.status ===
+                          "Paid"
+                          ? "status paid"
+                          : "status pending"
+                      }
+                    >
+                      {item.status}
+                    </span>
+                  </div>
+                )
                 )}
               </div>
             </div>
@@ -374,7 +531,7 @@ Razorpay Integration Pending`
                     Select Payment
                   </option>
 
-                  {paymentData.milestones
+                  {timeline
                     .filter(
                       (
                         item
@@ -454,6 +611,10 @@ Razorpay Integration Pending`
           </>
         )}
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+      />
     </MainLayout>
   );
 }
