@@ -3,6 +3,12 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+console.log("DB_HOST:", process.env.DB_HOST);
+console.log("DB_USER:", process.env.DB_USER);
+console.log("DB_PASSWORD:", process.env.DB_PASSWORD);
+console.log("DB_NAME:", process.env.DB_NAME);
+console.log("DB_PORT:", process.env.DB_PORT);
+
 const db = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -14,7 +20,7 @@ const db = mysql.createPool({
 db.getConnection((err, connection) => {
   if (err) {
     console.error("❌ Database Connection Failed");
-    console.error(err.message);
+    console.error(err);
   } else {
     console.log("✅ Database Connected Successfully");
     connection.release();

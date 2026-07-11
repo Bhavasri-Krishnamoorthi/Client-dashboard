@@ -48,14 +48,17 @@ export const login = (req, res) => {
 
     const token = generateToken(user);
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "Login Successful",
       token,
       user: {
         id: user.id,
+        client_id: user.client_id,
         full_name: user.full_name,
         email: user.email,
+        phone: user.phone,
+        company: user.company,
       },
     });
   });

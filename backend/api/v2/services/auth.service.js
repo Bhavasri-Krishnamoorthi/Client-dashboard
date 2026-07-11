@@ -18,9 +18,14 @@ export const registerUser = async (userData, callback) => {
         });
       }
 
+      // Generate Client ID
+      const newClientId = "CL" + Date.now();
+
+      // Add client_id to userData
+      userData.client_id = newClientId;
+
       // Hash Password
       const hashedPassword = await bcrypt.hash(userData.password, 10);
-
       userData.password = hashedPassword;
 
       // Save User
@@ -28,10 +33,10 @@ export const registerUser = async (userData, callback) => {
         if (err) return callback(err);
 
         callback(null, {
-    success: true,
-    message: "User Registered Successfully",
-    client_id: newClientId,
-});
+          success: true,
+          message: "User Registered Successfully",
+          client_id: newClientId,
+        });
       });
     });
   } catch (error) {

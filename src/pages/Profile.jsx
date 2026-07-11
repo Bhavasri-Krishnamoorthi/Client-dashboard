@@ -22,20 +22,41 @@ function Profile() {
   // Load Profile
   const loadProfile = async () => {
     try {
-      const response = await api.get("/profile/CL001");
+      // Get logged-in user
+      const loggedInUser = JSON.parse(
+        localStorage.getItem("loggedInUser")
+      );
+
+      if (!loggedInUser) {
+        alert("Please login first");
+        navigate("/");
+        return;
+      }
+
+      console.log("Logged In User:", loggedInUser);
+
+      const clientId = loggedInUser.client_id;
+
+      console.log("Client ID:", clientId);
+
+      const response = await api.get(`/profile/${clientId}`);
+
+      console.log(response.data);
 
       const data = response.data.data;
 
       setProfile({
-        clientId: data.client_id || "",
-        clientName: data.full_name || "",
-        email: data.email || "",
-        mobile: data.phone || "",
+        clientId: data.client_id,
+        clientName: data.full_name,
+        email: data.email,
+        mobile: data.phone,
         projectAddress: "",
-        companyName: data.company || "",
+        companyName: data.company,
       });
+
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      alert("Failed to load profile");
     }
   };
 
@@ -67,8 +88,9 @@ function Profile() {
       setIsEditing(false);
 
       loadProfile();
+
     } catch (error) {
-      console.log(error);
+      console.error(error);
       alert("Failed to update profile");
     }
   };
@@ -89,9 +111,7 @@ function Profile() {
 
           <div className="profile-header">
             <div className="profile-avatar">
-              {(profile.clientName || "C")
-                .charAt(0)
-                .toUpperCase()}
+              {(profile.clientName || "C").charAt(0).toUpperCase()}
             </div>
 
             <div>
@@ -125,7 +145,6 @@ function Profile() {
 
             <div className="info-card">
               <label>Email</label>
-
               <h3>{profile.email}</h3>
             </div>
 
@@ -146,7 +165,6 @@ function Profile() {
 
             <div className="info-card large-card">
               <label>Project Address</label>
-
               <h3>{profile.projectAddress || "Not Available"}</h3>
             </div>
 

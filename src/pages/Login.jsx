@@ -19,13 +19,17 @@ function Login() {
       });
 
       if (response.data.success) {
-        // Save client details if returned from backend
-        if (response.data.user) {
-          localStorage.setItem(
-            "loggedInUser",
-            JSON.stringify(response.data.user)
-          );
-        }
+        // Save complete user details
+        localStorage.setItem(
+          "loggedInUser",
+          JSON.stringify(response.data.user)
+        );
+
+        // Save client ID separately
+        localStorage.setItem(
+          "clientId",
+          response.data.user.client_id
+        );
 
         alert("Login Successful");
 
@@ -33,11 +37,14 @@ function Login() {
       } else {
         alert(response.data.message);
       }
-
     } catch (error) {
       console.error(error);
 
-      alert("Invalid Email or Password");
+      if (error.response) {
+        alert(error.response.data.message);
+      } else {
+        alert("Invalid Email or Password");
+      }
     }
   };
 
