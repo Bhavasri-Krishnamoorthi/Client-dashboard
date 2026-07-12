@@ -59,6 +59,7 @@ function Payments() {
 
   const loadPayments = async () => {
     try {
+      setLoading(true);
       const response = await fetch(
         "http://localhost:5000/api/v2/payments"
       );
@@ -99,6 +100,7 @@ function Payments() {
   };
   const loadTimeline = async () => {
     try {
+      setLoading(true);
       const response = await fetch(
         `http://localhost:5000/api/v2/payments/timeline/${paymentData.projectId}`
       );
@@ -162,7 +164,7 @@ function Payments() {
             customer_name: "Bharath",
             amount: selectedPayment.amount,
             payment_method: paymentMethod,
-            status: "Pending",
+            status: "Completed",
           }),
         }
       );

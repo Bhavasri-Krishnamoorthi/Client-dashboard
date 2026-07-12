@@ -951,10 +951,28 @@ function RecentTransaction(
 function Dashboard() {
   const isMobile = window.innerWidth <= 768;
   const [showProjectDetails, setShowProjectDetails] = useState(false);
+  const [dashboardData, setDashboardData] = useState(null);
   const [transactions, setTransactions] = useState([]);
   useEffect(() => {
+    loadDashboard();
     loadTransactions();
   }, []);
+  const loadDashboard = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/v2/dashboard"
+      );
+
+      const result = await response.json();
+
+      if (result.success) {
+        setDashboardData(result.data);
+      }
+
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const loadTransactions = async () => {
     try {
@@ -980,6 +998,7 @@ function Dashboard() {
       console.log(err);
     }
   };
+  console.log(dashboardData);
 
   return (
     <MainLayout>
